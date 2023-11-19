@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lovejoy's Antiques</title>
+    <link rel="stylesheet" href="/static/css/landing.css">
+</head>
+<body>
+    <header>
+        <h1>Lovejoy's Antiques</h1>
+        <nav>
+            <a href="#hero">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#featured-items">Featured Items</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <div class="hero-content">
+            <h2>Welcome to Lovejoy's Antiques</h2>
+            <p>Discover a world of history and elegance</p>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>Lovejoy's Antiques offers a unique collection of vintage and antique items, each with its own story. We pride ourselves on our exquisite selection and our commitment to preserving history.</p>
+    </section>
+
+<section id="featured-items">
+    <h2>Featured Items</h2>
+    {% for item in featured_items %}
+    <div class="item">
+        <img src="{{ url_for('static', filename=item.image_url) }}" alt="{{ item.name }}">
+        <h3>{{ item.name }}</h3>
+        <p>{{ item.description }}</p>
+    </div>
+    {% else %}
+    <p>No featured items at the moment.</p>
+    {% endfor %}
+</section>  
+
+    <section id="testimonials">
+        <h2>Customer Testimonials</h2>
+        <blockquote>
+            <p>"Lovejoy's Antiques is my go-to place for finding rare treasures. Their collection is unmatched!" - Emma G.</p>
+        </blockquote>
+        <blockquote>
+            <p>"The staff are knowledgeable and passionate about their items. It's always a pleasure visiting." - John D.</p>
+        </blockquote>
+        <!-- More testimonials can be added here -->
+    </section>
+
+    <footer>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>Email: contact@lovejoysantiques.com</p>
+            <p>Phone: (123) 456-7890</p>
+            <p>Address: 123 Antique Road, Historytown, HT 01234</p>
+        </section>
+        <section id="newsletter">
+            <h2>Newsletter Signup</h2>
+            <form>
+                <input type="email" placeholder="Enter your email">
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+        <section id="social-media">
+            <h2>Follow Us</h2>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </section>
+    </footer>
+</body>
+</html>
