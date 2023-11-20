@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <head>
     <title>Login Page</title>
     <style>
@@ -7,13 +10,13 @@
             font-family: 'Roboto', sans-serif;
             color: #333;
             background-color: #f8f8f8;
-            margin: 0; 
+            margin: 0;
             padding: 0;
         }
 
         header {
             background-color: #1a1a1a;
-            padding: 10px 0; 
+            padding: 10px 0;
             margin: 0;
             text-align: center;
             color: #fff;
@@ -25,7 +28,7 @@
 
         nav a {
             text-decoration: none;
-            color: #fff;    
+            color: #fff;
         }
 
         #login-form {
@@ -34,23 +37,34 @@
             margin: 50px auto;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
 
         #login-form .form-group {
             margin-bottom: 20px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
 
         #login-form label {
             display: block;
+            margin-top: 5px;
             margin-bottom: 5px;
+            /* Give some space below the label */
         }
+
+        nav a:hover {
+            color: #d2b48c;
+        }
+
 
         #login-form input[type="text"],
         #login-form input[type="password"] {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            box-sizing: border-box;
         }
 
         #login-form button {
@@ -72,18 +86,75 @@
             color: #fff;
             text-align: center;
             padding: 20px 0;
+            /* max-height: ; */
+        }
+
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .signup-logo {
+            max-width: 250px;
+            height: auto;
+        }
+
+
+        #lab_social_icon_footer a {
+            color: #333;
+        }
+
+        #lab_social_icon_footer .social:hover {
+            -webkit-transform: scale(1.1);
+            -moz-transform: scale(1.1);
+            -o-transform: scale(1.1);
+        }
+
+        #lab_social_icon_footer .social {
+            -webkit-transform: scale(0.8);
+            /* Browser Variations: */
+
+            -moz-transform: scale(0.8);
+            -o-transform: scale(0.8);
+            -webkit-transition-duration: 0.5s;
+            -moz-transition-duration: 0.5s;
+            -o-transition-duration: 0.5s;
+        }
+
+        /*
+    Multicoloured Hover Variations
+*/
+
+        #lab_social_icon_footer #social-fb:hover {
+            color: #3B5998;
+        }
+
+        #lab_social_icon_footer #social-tw:hover {
+            color: #4099FF;
+        }
+
+        #lab_social_icon_footer #social-gp:hover {
+            color: #d34836;
+        }
+
+        #lab_social_icon_footer #social-em:hover {
+            color: #f39c12;
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Lovejoy's Antique</h1>
         <nav>
             <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
+
         </nav>
     </header>
+
+    <div class="logo-container">
+        <img src="/static/images/Logo-removebg.png" alt="Lovejoy's Antique Logo" class="signup-logo">
+    </div>
 
     <div id="login-form">
         <form action="/login" method="post">
@@ -98,9 +169,29 @@
             <button type="submit">Login</button>
         </form>
     </div>
-
     <footer>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>Email: contact@lovejoysantiques.com</p>
+            <p>Phone: (123) 456-7890</p>
+            <p>Address: 123 Antique Road, Historytown, HT 01234</p>
+        </section>
+        <section id="social-media">
+            <h2>Follow Us</h2>
+            <section id="lab_social_icon_footer">
+                <div class="container">
+                    <div class="text-center center-block">
+                        <a href="https://www.facebook.com/bootsnipp"><i id="social-fb"
+                                class="fa fa-facebook-square fa-3x social"></i></a>
+                        <a href="https://twitter.com/bootsnipp"><i id="social-tw"
+                                class="fa fa-twitter-square fa-3x social"></i></a>
+                        <a href="mailto:#"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+                    </div>
+                </div>
+            </section>
+        </section>
         <p>&copy; Lovejoy's</p>
     </footer>
 </body>
-</html>
+
+</html>3

@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lovejoy's Antiques</title>
     <link rel="stylesheet" href="/static/css/landing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital@1&display=swap" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
 </head>
 <body>
     <header>
-        <h1>Lovejoy's Antiques</h1>
+        <img src="/static/images/Hero3.png" alt="Lovejoy's Antiques Logo" id="headerLogo">
+        <!-- <h1>Lovejoy's Antiques</h1> -->
         <nav>
             <a href="#hero">Home</a>
             <a href="#about">About Us</a>
@@ -16,12 +23,33 @@
             <a href="#testimonials">Testimonials</a>
             <a href="#contact">Contact</a>
         </nav>
+        <div class="user-auth">
+            <div class="dropdown">
+                {% if session.user_name %}
+                    <img src="/static/images/profile pic.webp" alt="User" id="userProfile" class="dropdown-toggle" data-toggle="dropdown">
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Welcome, {{ session.user_name }}</a>
+                        <a class="dropdown-item" href="/settings">Settings</a>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                {% else %}
+                    <img src="/static/images/profile pic.webp" alt="User" id="userProfile" class="dropdown-toggle" data-toggle="dropdown">
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/login">Sign In</a>
+                        <a class="dropdown-item" href="/signup">Sign Up</a>
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+        
     </header>
+    
 
     <section id="hero">
         <div class="hero-content">
-            <h2>Welcome to Lovejoy's Antiques</h2>
-            <p>Discover a world of history and elegance</p>
+            <h2>Discover Timeless Treasures at Lovejoy's Antiques</h2>
+            <!-- <a href="#featured-items" class="hero-cta">Explore Our Collection</a> -->
         </div>
     </section>
 
@@ -51,7 +79,6 @@
         <blockquote>
             <p>"The staff are knowledgeable and passionate about their items. It's always a pleasure visiting." - John D.</p>
         </blockquote>
-        <!-- More testimonials can be added here -->
     </section>
 
     <footer>
@@ -61,19 +88,20 @@
             <p>Phone: (123) 456-7890</p>
             <p>Address: 123 Antique Road, Historytown, HT 01234</p>
         </section>
-        <section id="newsletter">
-            <h2>Newsletter Signup</h2>
-            <form>
-                <input type="email" placeholder="Enter your email">
-                <button type="submit">Subscribe</button>
-            </form>
-        </section>
         <section id="social-media">
             <h2>Follow Us</h2>
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
+            <section id="lab_social_icon_footer">
+                <div class="container">
+                        <div class="text-center center-block">
+                                <a href="https://www.facebook.com/bootsnipp"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
+                                <a href="https://twitter.com/bootsnipp"><i id="social-tw" class="fa fa-twitter-square fa-3x social"></i></a>
+                                <a href="mailto:#"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+                    </div>
+                </div>
+                </section>
         </section>
+        <p>&copy; Lovejoy's</p>
     </footer>
+    <script src="/static/js/home.js"></script>
 </body>
 </html>

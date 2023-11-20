@@ -1,53 +1,84 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Sign Up Page</title>
     <style>
-        /* Same styling as your login page for consistency */
         body {
             font-family: 'Roboto', sans-serif;
             color: #333;
             background-color: #f8f8f8;
-            margin: 0; 
+            margin: 0;
             padding: 0;
         }
+
         header {
             background-color: #1a1a1a;
-            padding: 10px 0; 
+            padding: 10px 0;
             margin: 0;
             text-align: center;
             color: #fff;
         }
+
         header h1 {
             font-size: 2.5em;
         }
+
         nav a {
             text-decoration: none;
-            color: #fff;    
+            color: #fff;
         }
+
+        nav a:hover {
+            color: #d2b48c;
+        }
+
         #signup-form {
             background-color: #fff;
             max-width: 400px;
             margin: 50px auto;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-top: 5px;
         }
+
         input[type="text"],
         input[type="password"],
         input[type="email"],
+        input[type="email"],
         input[type="tel"] {
-            width: 100%;
+            width: calc(100% - 20px);
+            /* Adjust width to account for padding */
             padding: 10px;
+            margin-bottom: 10px;
+            /* Adds space below each input field */
             border: 1px solid #ddd;
             border-radius: 4px;
+            box-sizing: border-box;
+            /* Ensures padding is included in total width/height */
         }
+
+
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
+            border-color: #5e503f;
+            /* Focus color */
+        }
+
         button {
             width: 100%;
             padding: 10px;
@@ -56,38 +87,173 @@
             color: #fff;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+            /* Smooth background transition */
         }
+
         button:hover {
             background-color: #333;
         }
+
         footer {
             background-color: #1a1a1a;
             color: #fff;
             text-align: center;
             padding: 20px 0;
         }
+
+        .password-requirements {
+            margin-top: 10px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .password-requirement {
+            color: #888;
+            font-size: 0.8em;
+        }
+
+        .password-requirement.valid {
+            color: green;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .signup-logo {
+            max-width: 250px;
+            height: auto;
+        }
+
+
+        #lab_social_icon_footer a {
+            color: #333;
+        }
+
+        #lab_social_icon_footer .social:hover {
+            -webkit-transform: scale(1.1);
+            -moz-transform: scale(1.1);
+            -o-transform: scale(1.1);
+        }
+
+        #lab_social_icon_footer .social {
+            -webkit-transform: scale(0.8);
+            /* Browser Variations: */
+
+            -moz-transform: scale(0.8);
+            -o-transform: scale(0.8);
+            -webkit-transition-duration: 0.5s;
+            -moz-transition-duration: 0.5s;
+            -o-transition-duration: 0.5s;
+        }
+
+        /*
+    Multicoloured Hover Variations
+*/
+
+        #lab_social_icon_footer #social-fb:hover {
+            color: #3B5998;
+        }
+
+        #lab_social_icon_footer #social-tw:hover {
+            color: #4099FF;
+        }
+
+        #lab_social_icon_footer #social-gp:hover {
+            color: #d34836;
+        }
+
+        #lab_social_icon_footer #social-em:hover {
+            color: #f39c12;
+        }
     </style>
+    <script>
+        function checkPasswordStrength() {
+            var password = document.getElementById("password").value;
+            var minLength = document.getElementById("min-length");
+            var uppercase = document.getElementById("uppercase");
+            var lowercase = document.getElementById("lowercase");
+            var number = document.getElementById("number");
+            var specialChar = document.getElementById("special-char");
+
+            minLength.classList.toggle('valid', password.length >= 8);
+            uppercase.classList.toggle('valid', /[A-Z]/.test(password));
+            lowercase.classList.toggle('valid', /[a-z]/.test(password));
+            number.classList.toggle('valid', /[0-9]/.test(password));
+            specialChar.classList.toggle('valid', /[$@#&!]/.test(password));
+            checkPasswordsMatch();
+
+        }
+
+        function checkPasswordsMatch() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+            var matchMessage = document.getElementById("password-match");
+
+            if (password === confirmPassword && password.length > 0) {
+                matchMessage.textContent = "Passwords match.";
+                matchMessage.style.color = "green";
+            } else {
+                matchMessage.textContent = "Passwords do not match.";
+                matchMessage.style.color = "red";
+            }
+        }
+
+        function validatePassword(event) {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[$@#&!]/.test(password)) {
+                alert("Password does not meet the strength requirements.");
+                event.preventDefault();
+                return false;
+            }
+            return true;
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                event.preventDefault();
+                return false;
+            }
+        }
+    </script>
 </head>
+
 <body>
     <header>
         <h1>Lovejoy's Antique</h1>
         <nav>
             <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
         </nav>
     </header>
 
+    <div class="logo-container">
+        <img src="/static/images/Logo-removebg.png" alt="Lovejoy's Antique Logo" class="signup-logo">
+    </div>
+
     <div id="signup-form">
-        <form action="/signup" method="post">
+        <form action="/signup" method="post" onsubmit="return validatePassword(event)">
             <div class="form-group">
                 <label for="email">Email Address:</label>
                 <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <!-- Ensure to implement proper password strength requirements -->
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required oninput="checkPasswordStrength()">
+                <ul class="password-requirements">
+                    <li id="min-length" class="password-requirement">At least 8 characters</li>
+                    <li id="uppercase" class="password-requirement">At least one uppercase letter</li>
+                    <li id="lowercase" class="password-requirement">At least one lowercase letter</li>
+                    <li id="number" class="password-requirement">At least one number</li>
+                    <li id="special-char" class="password-requirement">At least one special character ($@#&!)</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required
+                    oninput="checkPasswordsMatch()">
+                <p id="password-match" style="font-size: 0.8em;">Passwords do not match.</p>
             </div>
             <div class="form-group">
                 <label for="name">Name:</label>
@@ -95,16 +261,37 @@
             </div>
             <div class="form-group">
                 <label for="contact">Contact Number:</label>
-                <!-- Input type 'tel' for telephone number -->
                 <input type="tel" id="contact" name="contact">
             </div>
+
             <button type="submit">Sign Up</button>
         </form>
     </div>
 
     <footer>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>Email: contact@lovejoysantiques.com</p>
+            <p>Phone: (123) 456-7890</p>
+            <p>Address: 123 Antique Road, Historytown, HT 01234</p>
+        </section>
+        <section id="social-media">
+            <h2>Follow Us</h2>
+            <section id="lab_social_icon_footer">
+                <div class="container">
+                    <div class="text-center center-block">
+                        <a href="https://www.facebook.com/bootsnipp"><i id="social-fb"
+                                class="fa fa-facebook-square fa-3x social"></i></a>
+                        <a href="https://twitter.com/bootsnipp"><i id="social-tw"
+                                class="fa fa-twitter-square fa-3x social"></i></a>
+                        <a href="mailto:#"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+                    </div>
+                </div>
+            </section>
+        </section>
         <p>&copy; Lovejoy's</p>
+
     </footer>
 </body>
-</html>
 
+</html>

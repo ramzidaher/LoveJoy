@@ -12,6 +12,10 @@ header {
     margin: 0;
     text-align: center;
     color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
 }
 header h1 {
     font-size: 2.5em;
@@ -21,13 +25,53 @@ nav a {
     margin: 0 15px;
     text-decoration: none;
     color: #fff;
+    font-family: 'Old Standard TT', serif;
+    font-size: 1rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+
 }
 
 #hero {
-    background: url('hero-image.jpg') no-repeat center center;
+    position: relative;
+    background: url('/static/images/Hero2.png') no-repeat center center;
     background-size: cover;
-    height: 300px;
+    height: 500px;
 }
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+
+#hero h2 {
+    font-size: 3rem; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+    font-family: 'Old Standard TT', serif;
+
+}
+
+.hero-cta {
+    display: inline-block;
+    /* margin-top: 30px; */
+    padding: 10px 20px;
+    background-color: #333; /* Dark background for the button */
+    color: white; /* White text */
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.hero-cta:hover {
+    background-color: #555; /* Slightly lighter background on hover */
+}
+
+
 
 #about, #testimonials {
     background-color: #fff;
@@ -47,4 +91,168 @@ footer {
     color: #fff;
     text-align: center;
     padding: 20px 0;
+}
+
+.fa {
+    padding: 20px;
+    font-size: 30px;
+    width: 30px;
+    text-align: center;
+    text-decoration: none;
+    margin: 5px 5px;
+    border-radius: 50%;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+
+.fa-facebook {
+    background: #3B5998;
+    color: white;
+}
+
+.fa-twitter {
+    background: #55ACEE;
+    color: white;
+}
+
+.fa-instagram {
+    background: #125688;
+    color: white;
+}
+
+/* header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+} */
+
+.user-auth {
+    margin: 10px 20px; /* Adjust the values as needed */
+    position: relative;
+}
+
+
+/* Additional styling for buttons */
+#signInBtn, #signUpBtn {
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+header h1 {
+    padding: 10px 20px; 
+    margin: 0; 
+    font-family: 'Old Standard TT', serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+
+#headerLogo {
+    max-height: 100px; /* Adjust based on your design */
+    /* padding: 10px; */
+}
+@media (max-width: 768px) {
+    #headerLogo {
+        max-height: 40px; /* Smaller logo for mobile devices */
+    }
+}
+
+
+#lab_social_icon_footer a {
+    color: #333;
+}
+
+#lab_social_icon_footer .social:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+}
+
+#lab_social_icon_footer .social {
+    -webkit-transform: scale(0.8);
+    /* Browser Variations: */
+
+    -moz-transform: scale(0.8);
+    -o-transform: scale(0.8);
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+}
+
+/*
+Multicoloured Hover Variations
+*/
+
+#lab_social_icon_footer #social-fb:hover {
+    color: #3B5998;
+}
+
+#lab_social_icon_footer #social-tw:hover {
+    color: #4099FF;
+}
+
+#lab_social_icon_footer #social-gp:hover {
+    color: #d34836;
+}
+
+#lab_social_icon_footer #social-em:hover {
+    color: #f39c12;
+}
+
+
+
+
+
+#userProfile {
+    height: 50px; /* Adjust as needed */
+    width: 50px; /* Adjust as needed */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#userProfile:hover {
+    transform: scale(1.1); /* Slightly enlarges the image on hover */
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(-10px);
+}
+
+.dropdown-menu a {
+    color: #333333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f2f2f2; /* Light grey background on hover */
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
 }

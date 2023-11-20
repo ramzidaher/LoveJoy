@@ -2,6 +2,8 @@ import os
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 # Initialize Flask App
 app = Flask(__name__)
@@ -41,23 +43,23 @@ def show_users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
-# Route for the registration form
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         email = request.form['email']
-        password = request.form['password']  # In production, hash this password
+        plain_text_password = request.form['password']
+        hashed_password = generate_password_hash(plain_text_password)
         name = request.form['name']
         contact = request.form['contact']
 
-        new_user = User(email=email, password=password, name=name, contact=contact)
+        new_user = User(email=email, password=hashed_password, name=name, contact=contact)
         db.session.add(new_user)
         db.session.commit()
 
         return redirect(url_for('signup'))
     return render_template('signup.html')
 
-# Route for login
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -65,13 +67,22 @@ def login():
         password = request.form['password']
 
         user = User.query.filter_by(email=username).first()
-        if user and user.password == password:
+        if user and check_password_hash(user.password, password):
             session['username'] = user.name
             return redirect(url_for('home'))
         else:
-            return "Invalid login"
+            return render_template('login.html', error="Invalid username or password")
 
     return render_template('login.html')
+
+
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
 
 # Route for file upload
 @app.route('/upload', methods=['GET', 'POST'])
@@ -96,7 +107,7 @@ def upload_file():
     return render_template('upload.html')
 
 # Route for displaying home page with uploaded items
-@app.route('/home')
+@app.route('/')
 def home():
     featured_items = User.query.filter(User.image_url != None).all()
     return render_template('home.html', featured_items=featured_items)
