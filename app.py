@@ -3,6 +3,8 @@ from flask import Flask, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import session
+
 
 
 # Initialize Flask App
@@ -16,7 +18,7 @@ app.config['SECRET_KEY'] = 'your_secret_key'  # Change to a random secret key
 # File Upload Configuration
 UPLOAD_FOLDER = 'path/to/upload/folder'  # Change to your desired upload folder path
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = "/static/uploads"
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
@@ -52,6 +54,14 @@ def signup():
         name = request.form['name']
         contact = request.form['contact']
 
+        # Handle file upload
+        if 'profile-pic' in request.files:
+            file = request.files['profile-pic']
+            if file.filename != '':
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                # Here, you could also update the new_user object to include the image path
+
         new_user = User(email=email, password=hashed_password, name=name, contact=contact)
         db.session.add(new_user)
         db.session.commit()
@@ -65,12 +75,17 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        print("Username:", username)
+        print("Password:", password)
         user = User.query.filter_by(email=username).first()
         if user and check_password_hash(user.password, password):
-            session['username'] = user.name
+            session['user_id'] = user.id  # Storing user's id in the session
+            session['username'] = user.name  # Storing user's name in the session
+            print("LOGIN WORKED")
             return redirect(url_for('home'))
+    
         else:
+            print("didnt work")
             return render_template('login.html', error="Invalid username or password")
 
     return render_template('login.html')
@@ -81,7 +96,8 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('login'))
+    return redirect(url_for('login'))  # or redirect to home
+
 
 
 # Route for file upload

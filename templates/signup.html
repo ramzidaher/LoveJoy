@@ -233,7 +233,11 @@
     </div>
 
     <div id="signup-form">
-        <form action="/signup" method="post" onsubmit="return validatePassword(event)">
+        <form action="/signup" method="post" enctype="multipart/form-data" onsubmit="return validatePassword(event)">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
             <div class="form-group">
                 <label for="email">Email Address:</label>
                 <input type="email" id="email" name="email" required>
@@ -255,15 +259,15 @@
                     oninput="checkPasswordsMatch()">
                 <p id="password-match" style="font-size: 0.8em;">Passwords do not match.</p>
             </div>
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
+
             <div class="form-group">
                 <label for="contact">Contact Number:</label>
                 <input type="tel" id="contact" name="contact">
             </div>
-
+            <div class="form-group">
+                <label for="profile-pic">Profile Picture:</label>
+                <input type="file" id="profile-pic" name="profile-pic" accept="image/*">
+            </div>
             <button type="submit">Sign Up</button>
         </form>
     </div>
