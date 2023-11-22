@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.header {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.product-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.product-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.product-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.product-info h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.product-info p {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Responsive Grid */
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Product Gallery</h1>
+        </header>
+        <div class="product-grid">
+            {% for user_name, product_name, image_url in products %}
+            <div class="product-item">
+                <img src="{{ url_for('static', filename='uploads/' + image_url) }}" alt="{{ product_name }}">
+                <div class="product-info">
+                    <h3>{{ product_name }}</h3>
+                    <p>Uploaded by: {{ user_name }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
