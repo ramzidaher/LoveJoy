@@ -127,29 +127,6 @@ def logout():
     return redirect(url_for('login'))  # or redirect to home
 
 
-
-# # Route for file upload
-# @app.route('/upload', methods=['GET', 'POST'])
-# def upload_file():
-#     if 'username' not in session:
-#         return redirect(url_for('login'))
-
-#     if request.method == 'POST':
-#         if 'file' not in request.files:
-#             return 'No file part'
-#         file = request.files['file']
-#         if file.filename == '':
-#             return 'No selected file'
-#         if file and allowed_file(file.filename):
-#             filename = secure_filename(file.filename)
-#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#             user = User.query.filter_by(name=session['username']).first()
-#             user.image_url = filename
-#             db.session.commit()
-#             return redirect(url_for('home'))
-
-#     return render_template('upload.html')
-
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if 'user_id' not in session:

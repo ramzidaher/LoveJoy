@@ -224,18 +224,23 @@
             <div class="cardcontainer">
                 <div class="photo">
                     {% if product.image_url %}
-                    <img src="{{ url_for('static', filename='uploads/' + product.image_url) }}" alt="{{ product.name }}">
+                    <img src="{{ url_for('static', filename='uploads/' + product.image_url) }}"
+                        alt="{{ product.name }}">
                     {% else %}
                     <p>No image available</p>
                     {% endif %}
                 </div>
                 <div class="content">
                     <p class="txt4">{{ product.name }}</p>
-                    <p class="txt5">Category</p> <!-- Assuming you want to display the category here -->
+                    <p class="txt5">Short Description or Category</p>
                     <p class="txt2">{{ product.description }}</p>
                 </div>
                 <div class="footer">
-                    <a class="waves-effect waves-light btn" href="{{ url_for('product_details', id=product.id) }}">Read More</a>
+                    <p>
+                        <a class="waves-effect waves-light btn" href="#">Read More</a>
+                        <!-- Other elements like 'like' button can go here if needed -->
+                    </p>
+                    <!-- Additional information like time or comments -->
                 </div>
             </div>
             {% else %}
@@ -251,18 +256,23 @@
             <div class="cardcontainer">
                 <div class="photo">
                     {% if product.image_url %}
-                    <img src="{{ url_for('static', filename='uploads/' + product.image_url) }}" alt="{{ product.name }}">
+                    <img src="{{ url_for('static', filename='uploads/' + product.image_url) }}"
+                        alt="{{ product.name }}">
                     {% else %}
                     <p>No image available</p>
                     {% endif %}
                 </div>
                 <div class="content">
                     <p class="txt4">{{ product.name }}</p>
-                    <p class="txt5">Category</p> <!-- Assuming you want to display the category here -->
+                    <p class="txt5">Short Description or Category</p>
                     <p class="txt2">{{ product.description }}</p>
                 </div>
                 <div class="footer">
-                    <a class="waves-effect waves-light btn" href="{{ url_for('product_details', id=product.id) }}">Read More</a>
+                    <p>
+                        <a class="waves-effect waves-light btn" href="#">Read More</a>
+                        <!-- Other elements like 'like' button can go here if needed -->
+                    </p>
+                    <!-- Additional information like time or comments -->
                 </div>
             </div>
             {% endfor %}
@@ -270,6 +280,5 @@
         {% endif %}
     </div>
 </body>
-
 
 </html>
