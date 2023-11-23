@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+
+
+        /* Dashboard container */
+        .dashboard {
+            text-align: center;
+            width: 100%;
+            /* max-width: 400px; */
+            top: 10px;
+        }
+
+
+        .profile-db {
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: rgba(209, 201, 201, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+
+        /* Card style for user info */
+        .user-card {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .user-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .user-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Profile picture */
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 100px auto 10px;
+            display: block;
+        }
+
+        @media (min-width: 600px) {
+            .profile-pic {
+                margin: 40px auto 20px;
+                /* Adjust the margin for larger screens */
+            }
+        }
+
+
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+        :root {
+
+            font-size: 15px;
+
+            /* Primary */
+            --var-soft-blue: hsl(215, 51%, 70%);
+            --var-cyan: hsl(178, 100%, 50%);
+            /* Neutral */
+            --var-main-darkest: hsl(217, 54%, 11%);
+            --var-card-dark: hsl(216, 50%, 16%);
+            --var-line-dark: hsl(215, 32%, 27%);
+            --var-lightest: white;
+
+            /* Fonts */
+
+            --var-heading: normal normal 600 1.5em/1.6em 'Outfit', sans-serif;
+
+            --var-small-heading: normal normal 400 1em/1em 'Outfit', sans-serif;
+
+            --var-para: normal normal 300 1em/1.55em 'Outfit', sans-serif;
+        }
+
+
+        html {
+            box-sizing: border-box;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit;
+            margin: 0;
+        }
+
+        body {
+            background-color: var(--var-main-darkest);
+        }
+
+        img {
+            width: 100%;
+            border-radius: 15px;
+            display: block;
+        }
+
+        a {
+            color: inherit;
+        }
+
+
+        h1 {
+            font: var(--var-heading);
+            color: var(--var-lightest);
+            padding: 1.2em 0;
+        }
+
+        h2 {
+            font: var(--var-small-heading);
+            color: var(--var-lightest);
+            /* padding on .coin-base */
+        }
+
+        p {
+            font: var(--var-para);
+            color: var(--var-soft-blue);
+        }
+
+        span {
+            color: white;
+        }
+
+
+        .card-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 2em auto;
+            background-color: var(--var-card-dark);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            padding: 2rem;
+        }
+
+        div.flex-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        div.coin-base,
+        .time-left,
+        .card-attribute {
+            display: flex;
+            align-items: center;
+            padding: 1em 0;
+        }
+
+        .card-attribute {
+            padding-bottom: 1.5em;
+            border-top: 2px solid var(--var-line-dark);
+        }
+
+        a.hero-image-container {
+            position: relative;
+            display: block;
+        }
+
+
+        img.eye {
+            position: absolute;
+            width: 100%;
+            max-width: 2em;
+            top: 44%;
+            left: 43%;
+        }
+
+        @media (min-width:400px) {
+            img.eye {
+                max-width: 3em;
+            }
+        }
+
+        .hero-image-container::after {
+            content: '';
+            background-image: url("https://i.postimg.cc/9MtT4GZY/view.png");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 5rem;
+            background-color: hsla(178, 100%, 50%, 0.3);
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .hero-image-container:hover::after {
+            opacity: 1;
+        }
+
+        .small-image {
+            width: 1.2em;
+            margin-right: .5em;
+        }
+
+        .small-avatar {
+            width: 2em;
+            border-radius: 200px;
+            outline: 2px solid white;
+            margin-right: 1.4em;
+        }
+
+        div.attribution {
+            margin: 0 auto;
+            width: 100%;
+            font: var(--var-para);
+            text-align: center;
+            padding: 1.5em 0 4em 0;
+            color: var(--var-line-dark);
+        }
+
+        .attribution a {
+            color: var(--var-soft-blue);
+        }
+
+        @media (min-width:600px) {
+            body {
+                font-size: 18px;
+            }
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 600px) {
+            .card-container {
+                margin: 0;
+            }
+        }
+
+        .user-card {
+            /* Flex container */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .button-container {
+            /* Container for buttons */
+            display: flex;
+            justify-content: center;
+            /* Center buttons horizontally */
+            gap: 10px;
+            /* Space between buttons */
+        }
+
+        .btn {
+            /* Button styling */
+            background-color: #041E20;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            /* Smooth transition for hover effect */
+        }
+
+        .btn:hover {
+            /* Button hover effect */
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #555;
+            /* Slightly darker background on hover */
+            color: white;
+            /* Keep text color white on hover */
+        }
+
+        @media screen and (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+                /* Stack buttons vertically on smaller screens */
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                /* Full width for smaller screens */
+            }
+        }
+
+
+        /* Styles for hidden menu */
+        .menu-hidden {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.5s, max-height 0.5s;
+        }
+
+        .menu-visible {
+            opacity: 1;
+            max-height: 200px;
+            /* Adjust as needed based on content */
+            transition: opacity 0.5s, max-height 0.5s;
+        }
+
+        .menu-hidden,
+        .menu-visible {
+            margin: 20px auto;
+            max-width: 600px;
+            /* Adjust as needed */
+            background: #f0f0f0;
+            /* Same as user-card */
+            border-radius: 8px;
+            box-shadow: rgba(209, 201, 201, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+            padding: 20px;
+            transition: opacity 0.5s, max-height 0.5s;
+        }
+
+        /* Styles for hidden menu */
+        .menu-hidden {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.5s, max-height 0.5s;
+        }
+
+        .menu-visible {
+            opacity: 1;
+            max-height: 1000px;
+            /* Adjust as needed based on content */
+            transition: opacity 0.5s, max-height 0.5s;
+        }
+
+        /* Adjustments for form inputs */
+        .form-control {
+            border-radius: 4px;
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background-color: #666;
+            border-color: #666;
+        }
+
+        .btn-primary:hover {
+            background-color: #041E20;
+            border-color: #041E20;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard">
+        <img src="/static/images/avatar.jpg" alt="Profile Picture" class="profile-pic">
+
+        <div class="profile-db">
+            <div class="user-card">
+                <h3>{{ username }}</h3>
+                <p>Email: {{emailaddr}}</p>
+                <p>Contact Number: {{ phonenumber }}</p>
+                <!-- Buttons -->
+                <div class="button-container">
+                    <button class="btn" id="uploadAnti">Upload Antique</button>
+                    <button class="btn">Settings</button>
+                    <a href="/logout">
+                        <button class="btn">Logout</button>
+                    </a>
+                                    </div>
+            </div>
+        </div>
+
+        <!-- Hidden menu -->
+        <div id="hiddenMenu" class="menu-hidden">
+            <form action="{{ url_for('profiledb') }}" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="product_name" class="form-label">Product Name</label>
+                    <input type="text" id="product_name" name="product_name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="product_description" class="form-label">Product Description</label>
+                    <textarea id="product_description" name="product_description" class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="product_image" class="form-label">Product Image</label>
+                    <input type="file" id="product_image" name="product_image" class="form-control" required>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary btn-lg" type="submit" id="customButton">Upload Product</button>
+                </div>
+            </form>
+        </div>
+
+
+
+
+        <!-- Additional cards or information can be added here -->
+        {% if current_user_products %}
+        <h1>My Products</h1>
+        <div class="cards-grid">
+            {% for product in current_user_products %}
+            <div class="card-container">
+                <a href="/" class="hero-image-container">
+                    {% if product.image_url %}
+                    <img class="hero-image" src="{{ url_for('static', filename='uploads/' + product.image_url) }}"
+                        alt="{{ product.name }}">
+                    {% else %}
+                    <p>No image available</p>
+                    {% endif %}
+                </a>
+                <main class="main-content">
+                    <h1><a href="#">{{ product.name }}</a></h1>
+                    <p>{{ product.description }}</p>
+                </main>
+
+                <div class="card-attribute">
+                    <img src="/static/images/avatar.jpg" alt="avatar" class="small-avatar" />
+                    <!-- <p>Uploaded by <span><a href="#">{{ product.uploader_name }}</a></span></p> -->
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('uploadAnti').addEventListener('click', function () {
+            var hiddenMenu = document.getElementById('hiddenMenu');
+            if (hiddenMenu.classList.contains('menu-hidden')) {
+                hiddenMenu.classList.remove('menu-hidden');
+                hiddenMenu.classList.add('menu-visible');
+            } else {
+                hiddenMenu.classList.remove('menu-visible');
+                hiddenMenu.classList.add('menu-hidden');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -110,7 +110,7 @@ def login():
             session['user_id'] = user.id  # Storing user's id in the session
             session['username'] = user.name  # Storing user's name in the session
             print("LOGIN WORKED")
-            return redirect(url_for('home'))
+            return redirect(url_for('profiledb'))
     
         else:
             print("didnt work")
@@ -127,34 +127,57 @@ def logout():
     return redirect(url_for('login'))  # or redirect to home
 
 
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
 
-    if request.method == 'POST':
-        product_name = request.form['product_name']
-        product_description = request.form['product_description']
-        file = request.files['product_image']
+# # Route for file upload
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload_file():
+#     if 'username' not in session:
+#         return redirect(url_for('login'))
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
+#     if request.method == 'POST':
+#         if 'file' not in request.files:
+#             return 'No file part'
+#         file = request.files['file']
+#         if file.filename == '':
+#             return 'No selected file'
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             user = User.query.filter_by(name=session['username']).first()
+#             user.image_url = filename
+#             db.session.commit()
+#             return redirect(url_for('home'))
 
-            new_product = Product(
-                name=product_name,
-                description=product_description,
-                image_url=filename,  # Store the filename instead of binary data
-                user_id=session['user_id']
-            )
+#     return render_template('upload.html')
 
-            db.session.add(new_product)
-            db.session.commit()
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload_file():
+#     if 'user_id' not in session:
+#         return redirect(url_for('login'))
 
-            return redirect(url_for('show_products'))
+#     if request.method == 'POST':
+#         product_name = request.form['product_name']
+#         product_description = request.form['product_description']
+#         file = request.files['product_image']
 
-    return render_template('upload.html')
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+#             file.save(file_path)
+
+#             new_product = Product(
+#                 name=product_name,
+#                 description=product_description,
+#                 image_url=filename,  # Store the filename instead of binary data
+#                 user_id=session['user_id']
+#             )
+
+#             db.session.add(new_product)
+#             db.session.commit() 
+
+#             return redirect(url_for('show_products'))
+
+#     return render_template('upload.html')
 
 
 
@@ -176,6 +199,47 @@ def show_products():
         current_user_products = Product.query.filter_by(user_id=current_user_id).all()
 
     return render_template('products.html', all_products=all_products, current_user_products=current_user_products)
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profiledb():
+    all_products = Product.query.all()
+    name = None  # Initialize the name variable
+    current_user_products = []
+
+    if 'user_id' in session:
+        current_user_id = session['user_id']
+        current_user = User.query.filter_by(id=current_user_id).first()
+        if current_user:
+            name = current_user.name  # Use the correct attribute here
+            email = current_user.email
+            tel = current_user.contact
+            current_user_products = Product.query.filter_by(user_id=current_user_id).all()
+    else :
+        return render_template('LandingPage.html')
+
+    if request.method == 'POST':    
+        product_name = request.form['product_name']
+        product_description = request.form['product_description']
+        file = request.files['product_image']
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            new_product = Product(
+                name=product_name,
+                description=product_description,
+                image_url=filename,  # Store the filename instead of binary data
+                user_id=session['user_id']
+            )
+
+            db.session.add(new_product)
+            db.session.commit() 
+
+            return redirect(url_for('profiledb'))
+    return render_template('userdb.html',phonenumber=tel,emailaddr=email, username=name, all_products=all_products, current_user_products=current_user_products)
+
 
 
 

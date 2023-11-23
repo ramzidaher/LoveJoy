@@ -7,7 +7,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
 <style>
+  /* 
+=========================
+Fonts
+=========================
+
+font-family: 'Outfit', sans-serif;
+
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+/* 
+========================
+Variables
+========================
+*/
+
+
 :root {
     
     font-size: 15px;
@@ -30,6 +47,11 @@
     --var-para: normal normal 300 1em/1.55em 'Outfit', sans-serif;
 }
 
+/* 
+=======================
+Setup
+=======================
+*/
 
 html {
     box-sizing: border-box;
@@ -54,6 +76,17 @@ a {
     color: inherit;
 }
 
+/* 
+
+Eye view
+
+https://i.postimg.cc/9MtT4GZY/view.png' border='0' alt='view */
+
+/*
+=========================
+Font Styling
+=========================
+*/
 
 h1 {
     font: var(--var-heading);
@@ -75,7 +108,13 @@ p {
 span {
     color: white;
 }
+/* 
+=====================
+Classes
+=====================
+*/
 
+/* LAYOUT */
 
 .card-container {
     width: 100%;
@@ -109,6 +148,9 @@ a.hero-image-container {
     display: block;
 }
 
+
+
+/* Details */
 
 img.eye {
     position: absolute;
@@ -238,8 +280,8 @@ div.attribution {
             </main>
             
             <div class="card-attribute">
-                <img src="/static/images/avatar.jpg" alt="avatar" class="small-avatar"/>
-                <!-- <p>Uploaded by <span><a href="#">{{ product.uploader_name }}</a></span></p> -->
+                <img src="https://i.postimg.cc/SQBzNQf1/image-avatar.png" alt="avatar" class="small-avatar"/>
+                <p>Uploaded by <span><a href="#">{{ product.uploader_name }}</a></span></p>
             </div>
         </div>
         {% endfor %}
