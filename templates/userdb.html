@@ -396,7 +396,7 @@
                     <a href="/logout">
                         <button class="btn">Logout</button>
                     </a>
-                                    </div>
+                </div>
             </div>
         </div>
 
@@ -422,16 +422,14 @@
         </div>
 
 
-
-
         <!-- Additional cards or information can be added here -->
-        {% if current_user_products %}
-        <h1>My Products</h1>
+        {% if current_user_antiques %}
+        <h1>Antique Evaluation</h1>
         <div class="cards-grid">
-            {% for product in current_user_products %}
+            {% for antique in current_user_antiques %}
             <div class="card-container">
                 <a href="/" class="hero-image-container">
-                    {% if product.image_url %}
+                    {% if antique.image_url %}
                     <img class="hero-image" src="{{ url_for('static', filename='uploads/' + product.image_url) }}"
                         alt="{{ product.name }}">
                     {% else %}
@@ -439,8 +437,8 @@
                     {% endif %}
                 </a>
                 <main class="main-content">
-                    <h1><a href="#">{{ product.name }}</a></h1>
-                    <p>{{ product.description }}</p>
+                    <h1><a href="#">{{ antique.name }}</a></h1>
+                    <p>{{ antique.description }}</p>
                 </main>
 
                 <div class="card-attribute">
@@ -452,6 +450,34 @@
         </div>
         {% endif %}
     </div>
+
+    <!-- Additional cards or information can be added here
+    {% if current_user_products %}
+    <h1>My Products</h1>
+    <div class="cards-grid">
+        {% for product in current_user_products %}
+        <div class="card-container">
+            <a href="/" class="hero-image-container">
+                {% if product.image_url %}
+                <img class="hero-image" src="{{ url_for('static', filename='uploads/' + product.image_url) }}"
+                    alt="{{ product.name }}">
+                {% else %}
+                <p>No image available</p>
+                {% endif %}
+            </a>
+            <main class="main-content">
+                <h1><a href="#">{{ product.name }}</a></h1>
+                <p>{{ product.description }}</p>
+            </main>
+
+            <div class="card-attribute">
+                <img src="/static/images/avatar.jpg" alt="avatar" class="small-avatar" />
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    </div> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
