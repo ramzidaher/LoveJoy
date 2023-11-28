@@ -286,6 +286,16 @@
                                         style="max-width: 300px;">
                                     <h3 class="login-heading mb-4">Lets Get You Registered!</h3>
                                 </div>
+                                <!-- Inside your <body> tag, preferably near the form -->
+                                {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                                {% if messages %}
+                                    <div class="alert alert-danger">
+                                        {% for message in messages %}
+                                            {{ message }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% endwith %}
                                 <div id="signup-form">
                                     <form action="/register" method="post" enctype="multipart/form-data"
                                         onsubmit="return validatePassword(event)">

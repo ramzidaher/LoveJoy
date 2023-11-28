@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from app import app
+from main import app
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your-database.db'
 db = SQLAlchemy(app)

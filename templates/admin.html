@@ -378,86 +378,82 @@
             background-color: #041E20;
             border-color: #041E20;
         }
+
+        /* Right Sidebar style */
+        .sidebar {
+            background-color: #333;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            width: 250px;
+            position: fixed;
+            right: 0; /* Sidebar on the right */
+            top: 0;
+            bottom: 0;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+        }
+
+        /* Adjust main content position */
+        body {
+            display: flex;
+        }
+
+        .dashboard {
+            margin-right: 250px; /* same as sidebar width */
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Admin-specific styles */
+        .admin-card {
+            background-color: #eee;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .admin-card h3 {
+            margin-bottom: 15px;
+        }
+
+        .admin-card p {
+            line-height: 1.6;
+        }
+    </style>
     </style>
 </head>
 
 <body>
 
+        <!-- Sidebar for navigation -->
+        <div class="sidebar">
+            <h2>Admin Menu</h2>
+            <a href="/admin/dashboard/users">Manage Users</a>
+            <a href="/admin/settings">Settings</a>
+            <a href="/logout">Logout</a>
+        </div>
+
     <div class="dashboard">
-        <!-- Check if image_url is set, else display default profile image -->
-        <img src="{{ image_url if image_url else url_for('static', filename='/images/avatar.jpg') }}"
-            alt="Profile Picture" class="profile-pic">
-        <div class="profile-db">
-            <div class="user-card">
-                <h3>{{ username }}</h3>
-                <p>Email: {{emailaddr}}</p>
-                <p>Contact Number: {{ phonenumber }}</p>
-                <div class="button-container">
-                    <a href="/evaluation">
-                        <button  class="btn" id="uploadAnti">Upload Evaluation</button>
-                    </a>
-                    <button class="btn">Settings</button>
-                    <a href="/logout">
-                        <button class="btn">Logout</button>
-                    </a>
-                    {% if is_admin %}
-                    <a href="/admin/dashboard">
-                        <button class="btn">Admin Dashboard</button>
-                    </a>                   
-                    {% endif %}
+        <div class="admin-card">
+            <h3>Admin Overview</h3>
+            <p>Number of Users: {{ total_users }}</p>
+            <p>Number of Admin's: {{ total_admins }}</p>
+            <p>Number of Regular Users: {{ total_regular_users }}</p>
 
-                </div>
-            </div>
         </div>
     </div>
-
-
-
-    {% if current_user_antiques %}
-    <h1>Antique Evaluation</h1>
-    <div class="cards-grid">
-        {% for antique in current_user_antiques %}
-        <div class="card-container">
-            <a href="/" class="hero-image-container">
-                {% if antique.image_url %}
-                <img class="hero-image"
-                    src="{{ url_for('static', filename='uploads/evaluation/' + antique.image_url) }}"
-                    alt="{{ antique.name }}">
-                {% else %}
-                <!-- Display default image when antique.image_url is null -->
-                <img class="hero-image" src="{{ url_for('static', filename='images/default-antique.jpg') }}"
-                    alt="Default Antique Image">
-                {% endif %}
-            </a>
-            <main class="main-content">
-                <h1><a href="#">{{ antique.name }}</a></h1>
-                <p>{{ antique.description }}</p>
-            </main>
-
-            <div class="card-attribute">
-                <img src="/static/images/avatar.jpg" alt="avatar" class="small-avatar" />
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.getElementById('uploadAnti').addEventListener('click', function () {
-            var hiddenMenu = document.getElementById('hiddenMenu');
-            if (hiddenMenu.classList.contains('menu-hidden')) {
-                hiddenMenu.classList.remove('menu-hidden');
-                hiddenMenu.classList.add('menu-visible');
-            } else {
-                hiddenMenu.classList.remove('menu-visible');
-                hiddenMenu.classList.add('menu-hidden');
-            }
-        });
-    </script>
-
 </body>
 
 </html>

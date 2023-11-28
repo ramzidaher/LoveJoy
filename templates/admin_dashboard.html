@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <!-- Add any additional CSS or JS here -->
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <section>
+        <h2>Admin Users</h2>
+        <ul>
+            {% for user in admin_users %}
+                <li>{{ user.name }} - {{ user.email }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section>
+        <h2>Regular Users</h2>
+        <ul>
+            {% for user in regular_users %}
+                <li>{{ user.name }} - {{ user.email }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+</body>
+</html>

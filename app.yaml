@@ -1,0 +1,2 @@
+runtime: python39  # Specify your Python runtime
+entrypoint: gunicorn -b :$PORT main:app  # Adjust for your application

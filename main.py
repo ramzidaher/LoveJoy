@@ -8,6 +8,12 @@ from datetime import datetime
 from flask import flash, redirect, url_for
 from datetime import timedelta
 from sqlalchemy import create_engine, MetaData, Table
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
+from flask import render_template, request, redirect, url_for, flash
+from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
+import os
 
 
 
@@ -23,6 +29,20 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change to a random secret key
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_USERNAME')  # Set as environment variable
+app.config['MAIL_PASSWORD'] = os.environ.get('GMAIL_PASSWORD')  # Set as environment variable
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
+
+
+mail = Mail(app)
+
+
+
 
 # File Upload Configuration
 UPLOAD_FOLDER = 'static/uploads'  
@@ -54,6 +74,8 @@ class User(db.Model):
     contact = db.Column(db.String(20), nullable=True)
     image_url = db.Column(db.String(300), nullable=True) 
     image_data = db.Column(db.LargeBinary)  
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)
+
 
     def __repr__(self):
         return f'<User {self.name}>'
@@ -69,6 +91,7 @@ class Antique(db.Model):
     image_url = db.Column(db.String(300), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     owner = db.relationship('User', backref=db.backref('antiques', lazy=True))
+    contact_method = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
         return f'<Antique {self.name}>'
@@ -87,31 +110,52 @@ def allowed_file(filename):
 def home():
     return render_template('LandingPage.html')
 
+
+
+
+def generate_reset_token(email):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    return serializer.dumps(email, salt='password-reset-salt')
+
+def confirm_reset_token(token, expiration=1800):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    try:
+        email = serializer.loads(token, salt='password-reset-salt', max_age=expiration)
+    except:
+        return False
+    return email
+
 @app.route('/register', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         email = request.form['email']
+        
+        # Check if the email is already registered
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Email already registered', 'error')
+            return redirect(url_for('signup'))
+
         plain_text_password = request.form['password']
         hashed_password = generate_password_hash(plain_text_password)
         name = request.form['name']
         contact = request.form['contact']
-        # profile_url = request.form['file']
 
         profile_pic = request.files.get('profile-pic')
         if profile_pic and allowed_file(profile_pic.filename):
             filename = secure_filename(profile_pic.filename)
             profile_pic.save(os.path.join(app.config['UPLOAD_FOLDER_PROFILE'], filename))
-
-            # URL to access the image (adjust based on your static URL configuration)
             profile_pic_url = url_for('static', filename='uploads/profilepics/' + filename)
         else:
             profile_pic_url = None  # Or a default image path
+
         new_user = User(email=email, password=hashed_password, name=name, contact=contact, image_url=profile_pic_url)
         db.session.add(new_user)
         db.session.commit()
 
         return redirect(url_for('login'))  
     return render_template('register.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -158,6 +202,7 @@ def evaluateAntique():
         anti_name = request.form['antique_name']
         anti_description = request.form['antique_description']
         anti_age = request.form['antique_est_age']
+        prefered_method = request.form['preferred_contact_method']
 
         # Handle file upload
         antique_image = request.files['antique_image']
@@ -175,7 +220,8 @@ def evaluateAntique():
                 description=anti_description,
                 age=anti_age,
                 image_url=filename,
-                user_id=current_user_id  # Set the user_id field
+                user_id=current_user_id,  # Set the user_id field
+                contact_method=prefered_method
             )
             db.session.add(new_antique)
             db.session.commit()
@@ -208,6 +254,7 @@ def profiledb():
             name = current_user.name  
             email = current_user.email
             tel = current_user.contact
+            is_admin = current_user.is_admin
             # Get antiques associated with the current user
             current_user_antiques = Antique.query.filter_by(user_id=current_user_id).all()
             image_url = current_user.image_url
@@ -216,15 +263,90 @@ def profiledb():
                 print("The list has items.")
             else:
                 print("The list is empty.")
-    return render_template('userdb.html', phonenumber=tel, emailaddr=email,username=name, current_user_antiques=current_user_antiques, image_url=image_url)
+    return render_template('userdb.html', phonenumber=tel, emailaddr=email,username=name, current_user_antiques=current_user_antiques, image_url=image_url, is_admin=is_admin)
 
 
 
+# SHOULD NOT BE ACCESSIBLE!!!!!!###
+@app.route('/make_admin/<int:user_id>')
+def make_admin(user_id):
+    user = User.query.get(user_id)
+    if user:
+        user.is_admin = True
+        db.session.commit()
+        return f"User {user.name} is now an admin."
+    else:
+        return "User not found", 404
+
+@app.route('/admin/')
+def admin():
+    if 'user_id' not in session or not User.query.get(session['user_id']).is_admin:
+        return redirect(url_for('login'))
+
+    users = User.query.all()
+    
+    # Filtering admin users and regular users
+    admin_users = [user for user in users if user.is_admin]
+    regular_users = [user for user in users if not user.is_admin]
+
+    # Counting admin users and regular users
+    total_users = len(users)
+    total_admins = len(admin_users)
+    total_regular_users = len(regular_users)
+        
+    return render_template('admin.html', total_users=total_users, total_admins=total_admins, total_regular_users=total_regular_users)
 
 
 
+@app.route('/admin/dashboard/users')
+def admin_dashboard():
+    if 'user_id' not in session or not User.query.get(session['user_id']).is_admin:
+        return redirect(url_for('login'))
+
+    users = User.query.all()
+    
+    admin_users = [user for user in users if user.is_admin]
+    regular_users = [user for user in users if not user.is_admin]
+
+    return render_template('admin_dashboard.html', admin_users=admin_users, regular_users=regular_users)
 
 
+
+@app.route('/reset', methods=["GET", "POST"])
+def reset_request():
+    if request.method == "POST":
+        email = request.form['email']
+        user = User.query.filter_by(email=email).first()
+        if user:
+            token = generate_reset_token(user.email)
+            reset_url = url_for('reset_token', token=token, _external=True)
+            msg = Message("Password Reset Request", 
+            sender="your-email@example.com",
+            recipients=[user.email])
+            msg.body = f"To reset your password, visit the following link: {reset_url}"
+            mail.send(msg)
+
+            flash('A password reset email has been sent.', 'info')
+        else:
+            flash('Email does not exist.', 'warning')
+    return render_template('reset_request.html')
+
+
+@app.route('/reset/<token>', methods=["GET", "POST"])
+def reset_token(token):
+    if request.method == "POST":
+        email = confirm_reset_token(token)
+        if email:
+            user = User.query.filter_by(email=email).first()
+            user.password = generate_password_hash(request.form['password'])
+            db.session.commit()
+            flash('Your password has been updated!', 'success')
+            print('Your password has been update')
+            return redirect(url_for('login'))
+        else:
+            flash('That is an invalid or expired token', 'warning')
+            return redirect(url_for('reset_request'))
+    return render_template('reset_token.html')
 
 
 
