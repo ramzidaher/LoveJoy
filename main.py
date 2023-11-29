@@ -1,4 +1,3 @@
-import os
 from flask import Flask, request, render_template, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -37,6 +36,10 @@ app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_USERNAME')  # Set as environment variable
 app.config['MAIL_PASSWORD'] = os.environ.get('GMAIL_PASSWORD')  # Set as environment variable
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
+
+
+
+
 
 
 mail = Mail(app)

@@ -11099,7 +11099,8 @@ body {
 @media (min-width: 992px) {
   .masthead {
     height: 100vh;
-    padding: 0;
+    min-height: 35rem; /* Add this line */
+    padding: 10rem 0; /* Adjust this value as needed */
   }
   .masthead h1, .masthead .h1 {
     font-size: 6.5rem;
