@@ -19,11 +19,13 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
 
 
-        /* Dashboard container */
         .dashboard {
             text-align: center;
             width: 100%;
@@ -138,6 +140,13 @@
             color: var(--var-lightest);
             /* padding on .coin-base */
         }
+
+        h3 {
+            font: var(--var-small-heading);
+            color: var(--var-lightest);
+            /* padding on .coin-base */
+        }
+
 
         p {
             font: var(--var-para);
@@ -378,6 +387,71 @@
             background-color: #041E20;
             border-color: #041E20;
         }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25em 0.75em;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 1em;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 10;
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-badge-pending {
+            background-color: #FFA500;
+            /* Orange color for pending */
+        }
+
+        .status-badge-done {
+            background-color: #28a745;
+            /* Green color for done */
+        }
+
+        .card-container {
+            position: relative;
+            /* To position the status badge absolutely within the card */
+            /* ... other styles ... */
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .contact-text {
+            margin-left: 10px;
+            font-size: 0.8em;
+            color: var(--var-soft-blue);
+            /* Or choose a color that fits your design */
+        }
+
+        .antique-age {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            padding-top: 1em;
+        }
+
+        .age-label {
+            font-weight: bold;
+            color: var(--var-lightest);
+            margin-right: 0.5em;
+        }
+
+        .age-value {
+            color: var(--var-soft-blue);
+            /* Or choose a color that fits your design */
+            font-size: 0.9em;
+        }
     </style>
 </head>
 
@@ -394,7 +468,7 @@
                 <p>Contact Number: {{ phonenumber }}</p>
                 <div class="button-container">
                     <a href="/evaluation">
-                        <button  class="btn" id="uploadAnti">Upload Evaluation</button>
+                        <button class="btn" id="uploadAnti">Upload Evaluation</button>
                     </a>
                     <button class="btn">Settings</button>
                     <a href="/logout">
@@ -403,7 +477,7 @@
                     {% if is_admin %}
                     <a href="/admin/dashboard">
                         <button class="btn">Admin Dashboard</button>
-                    </a>                   
+                    </a>
                     {% endif %}
 
                 </div>
@@ -431,11 +505,37 @@
             </a>
             <main class="main-content">
                 <h1><a href="#">{{ antique.name }}</a></h1>
+                <h2>Antique Description</h2>
                 <p>{{ antique.description }}</p>
+                <!-- <h3>Antique Request</h3>
+                <p>{{ antique.request }}</p> -->
+                <div class="antique-age">
+                    <span class="age-label">Age:</span>
+                    <span class="age-value">{{ antique.age }} years</span>
+                </div>
+
             </main>
 
+
             <div class="card-attribute">
-                <img src="/static/images/avatar.jpg" alt="avatar" class="small-avatar" />
+                <!-- <img src="/static/images/avatar.jpg" alt="avatar" class="small-avatar" /> -->
+                <!-- <span class="status-badge">Done</span> -->
+                <!-- <span class="status-badge">{{ antique.status }}</span> -->
+                <span
+                    class="status-badge {{ 'status-badge-done' if antique.status == 'Done' else 'status-badge-pending' }}">
+                    {{ antique.status }}
+                </span>
+                <span class="contact-text">{{ antique.request }}</span>
+
+
+
+                <!-- <div class="contact-method">
+                    <i class="{{ 'fa fa-envelope' if antique.contact_method == 'email' else 'fa fa-phone' }}"
+                        aria-hidden="true"></i>
+                    <span class="contact-text">{{ antique.contact_method }}</span>
+                </div> -->
+
+
             </div>
         </div>
         {% endfor %}
@@ -456,6 +556,13 @@
                 hiddenMenu.classList.add('menu-hidden');
             }
         });
+        document.querySelectorAll('.status-badge').forEach(function (badge) {
+            badge.addEventListener('click', function () {
+                alert("Status: " + this.innerText);
+                // Or any other interaction you want
+            });
+        });
+
     </script>
 
 </body>

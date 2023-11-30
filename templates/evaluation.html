@@ -160,6 +160,19 @@
                             <h3 class="login-heading mb-4">Evaluate An Antique!</h3>
                         </div>
                         <div class="form-container">
+                            <!-- Flash Messages Section Start -->
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} {{ 'alert-danger' if category == 'error' else '' }}"
+                                role="alert">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            {% endwith %}
+                            <!-- Flash Messages Section End -->
+
                             <form action="{{ url_for('evaluateAntique') }}" method="post" enctype="multipart/form-data"
                                 class="form">
 
@@ -185,17 +198,17 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="antique_image" class="form-label">Antique Image:</label>
-                                    <input type="file" class="form-control" id="antique_image" name="antique_image"
-                                        required>
-                                </div>
+                                    <small class="form-text text-muted">Image size: 1024 x 1024</small>
+                                    <input type="file" class="form-control" id="antique_image" name="antique_image" required>
+                                </div>                                
                                 <div class="mb-3">
                                     <label for="preferred_contact_method" class="form-label">Preferred Method of Contact
                                         (Select from Dropdown):</label>
                                     <select class="form-control" id="preferred_contact_method"
                                         name="preferred_contact_method">
                                         <option value="" disabled selected>Select your option</option>
-                                        <option value="email">Email</option>
-                                        <option value="phone">Phone</option>
+                                        <option value="Email">Email</option>
+                                        <option value="hone">Phone</option>
                                     </select>
                                 </div>
 
@@ -212,5 +225,4 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

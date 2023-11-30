@@ -13,6 +13,15 @@ from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 import os
+from PIL import Image
+from flask.cli import with_appcontext
+import click
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import click
+from flask.cli import with_appcontext
+
+
 
 
 
@@ -88,6 +97,7 @@ class Antique(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
+    request = db.Column(db.Text, nullable=True)
     age = db.Column(db.Integer, nullable=True)
     origin = db.Column(db.String(100), nullable=True)
     condition = db.Column(db.String(100), nullable=True)
@@ -95,6 +105,7 @@ class Antique(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     owner = db.relationship('User', backref=db.backref('antiques', lazy=True))
     contact_method = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.String(50), nullable=False, default='Pending')
 
     def __repr__(self):
         return f'<Antique {self.name}>'
@@ -204,8 +215,11 @@ def evaluateAntique():
     if request.method == 'POST':
         anti_name = request.form['antique_name']
         anti_description = request.form['antique_description']
+        request_anti = request.form['antique_request']
         anti_age = request.form['antique_est_age']
         prefered_method = request.form['preferred_contact_method']
+
+
 
         # Handle file upload
         antique_image = request.files['antique_image']
@@ -215,16 +229,32 @@ def evaluateAntique():
 
         if antique_image and allowed_file(antique_image.filename):
             filename = secure_filename(antique_image.filename)
-            antique_image.save(os.path.join(app.config['UPLOAD_FOLDER_EVALUATION'], filename))
+            filepath = os.path.join(app.config['UPLOAD_FOLDER_EVALUATION'], filename)
+            antique_image.save(filepath)
+
+            # Open the image and check dimensions
+            with Image.open(filepath) as img:
+                width, height = img.size
+
+            max_width = 1024
+            max_height = 1024
+
+            if width > max_width or height > max_height:
+                flash('Image dimensions exceed the allowed limit.', 'error')
+                os.remove(filepath)  # Remove the saved image as it is not valid
+                return redirect(request.url)
 
             # Create and save the Antique object
             new_antique = Antique(
                 name=anti_name,
                 description=anti_description,
-                age=anti_age,
+                request=request_anti,
+                age=anti_age,   
                 image_url=filename,
                 user_id=current_user_id,  # Set the user_id field
-                contact_method=prefered_method
+                contact_method=prefered_method,
+                status='Pending'  # Set the default status for new antiques
+
             )
             db.session.add(new_antique)
             db.session.commit()
@@ -270,16 +300,16 @@ def profiledb():
 
 
 
-# SHOULD NOT BE ACCESSIBLE!!!!!!###
-@app.route('/make_admin/<int:user_id>')
-def make_admin(user_id):
-    user = User.query.get(user_id)
-    if user:
-        user.is_admin = True
-        db.session.commit()
-        return f"User {user.name} is now an admin."
-    else:
-        return "User not found", 404
+# # SHOULD NOT BE ACCESSIBLE!!!!!!###
+# @app.route('/make_admin/<int:user_id>')
+# def make_admin(user_id):
+#     user = User.query.get(user_id)
+#     if user:
+#         user.is_admin = True
+#         db.session.commit()
+#         return f"User {user.name} is now an admin."
+#     else:
+#         return "User not found", 404
 
 @app.route('/admin/')
 def admin():
@@ -351,6 +381,29 @@ def reset_token(token):
             return redirect(url_for('reset_request'))
     return render_template('reset_token.html')
 
+@app.cli.command("promote-admin")
+@click.argument("email")
+@with_appcontext
+def promote_admin(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        user.is_admin = True
+        db.session.commit()
+        click.echo(f"User with email {email} has been promoted to admin.")
+    else:
+        click.echo("User not found.")
+
+@app.cli.command("remove-admin")
+@click.argument("email")
+@with_appcontext
+def promote_admin(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        user.is_admin = False
+        db.session.commit()
+        click.echo(f"User with email {email} has been removed as admin.")
+    else:
+        click.echo("User not found.")
 
 
 # Start the Flask application
