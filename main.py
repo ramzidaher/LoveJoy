@@ -111,9 +111,9 @@ class Antique(db.Model):
         return f'<Antique {self.name}>'
 
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
 
 # Create the database tables before the first request# Function to check allowed file extensions
 def allowed_file(filename):
