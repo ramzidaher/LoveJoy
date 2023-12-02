@@ -1,25 +1,18 @@
-from flask import Flask, request, render_template, redirect, url_for, session, flash
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.utils import secure_filename
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import session
-from datetime import datetime
-from flask import flash, redirect, url_for
-from datetime import timedelta
-from sqlalchemy import create_engine, MetaData, Table
-from flask_mail import Mail, Message
-from itsdangerous import URLSafeTimedSerializer
-from flask import render_template, request, redirect, url_for, flash
-from werkzeug.security import generate_password_hash
-from werkzeug.utils import secure_filename
 import os
+import click
+from datetime import datetime, timedelta
 from PIL import Image
+
+from flask import (
+    Flask, flash, redirect, render_template, request, session, url_for
+)
 from flask.cli import with_appcontext
-import click
-from flask import Flask
+from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
-import click
-from flask.cli import with_appcontext
+from itsdangerous import URLSafeTimedSerializer
+from sqlalchemy import create_engine, MetaData, Table
+from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 
 
 
