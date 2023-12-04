@@ -41,10 +41,7 @@
             color: #333;
             margin: 0;
             padding: 0;
-            /* background-image: url('/static/images/Landing.png'); */
-            /* Add your background image URL here */
             background-size: cover;
-            /* Cover the entire page with the background image */
             background-position: center;
             background-repeat: no-repeat;
 
@@ -84,7 +81,6 @@
             color: #d2b48c;
         }
 
-        /* Styling the form container */
         .form-container {
             max-width: 500px;
             margin: 0 auto;
@@ -95,60 +91,166 @@
             position: relative;
         }
 
-        /* Add a shadow at the bottom of the form container */
 
         .form-group label {
             display: block;
-            /* Makes the label take up the full width */
             margin-bottom: .5rem;
-            /* Adds some space between the label and the input field */
         }
 
         input[type="text"],
         input[type="file"],
         textarea {
             width: 100%;
-            /* Makes the input take up the full width of its parent */
             padding: .375rem .75rem;
-            /* Adds some padding inside the input */
             border: 1px solid #ced4da;
-            /* Adds a border to the input */
             border-radius: .25rem;
-            /* Rounds the corners of the input */
             margin-bottom: .5rem;
-            /* Adds some space below the input */
         }
 
         input[type="submit"] {
             display: block;
-            /* Makes the input take up the full width */
             width: 100%;
             padding: .75rem;
-            /* Adds some padding inside the input */
             margin-top: .5rem;
-            /* Adds some space above the input */
             background-color: #041E20;
-            /* Background color for the button */
             color: white;
-            /* Text color for the button */
             border-color: #041E20;
-            /* Border color for the button */
             border-radius: .25rem;
-            /* Rounds the corners of the button */
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            /* Adds a shadow to the button */
         }
 
         input[type="submit"]:hover {
             transform: scale(1.05);
-            /* Scales the button up slightly when hovered */
             box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.3);
-            /* Increases the shadow when hovered */
+        }
+
+        :root {
+            --var-soft-blue: hsl(215, 51%, 70%);
+            --var-cyan: hsl(178, 100%, 50%);
+            --var-main-darkest: hsl(217, 54%, 11%);
+            --var-card-dark: hsl(216, 50%, 16%);
+            --var-line-dark: hsl(215, 32%, 27%);
+            --var-lightest: white;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px 10px 10px;
+            font-family: 'Roboto', sans-serif;
+
+
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+
+        }
+
+        .left-spacer,
+        .profile-dropdown {
+            width: 50px;
+        }
+
+        .left-spacer {
+            visibility: hidden;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100px;
+        }
+
+
+        .profile-dropdown img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            visibility: hidden;
+            position: absolute;
+            right: 0;
+            background-color: var(--var-card-dark);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            transform: translateY(-20px);
+        }
+
+        .dropdown-content a {
+            color: var(--var-lightest);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--var-soft-blue);
+        }
+
+        .show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card-container {
+            background-color: var(--var-card-dark);
+            border-radius: 15px;
+            padding: 2rem;
+            color: var(--var-lightest);
+        }
+
+        .antiques-title {
+            text-align: center;
+            color: var(--var-lightest);
+            font-family: 'Roboto', sans-serif;
+            font-family: bold;
+            margin-top: 100px;
+        }
+
+        .profile-dropdown:hover .dropdown-content {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <div class="left-spacer"></div> <!-- Invisible spacer -->
+        <div class="header-title">
+        </div>
+        <div class="profile-dropdown">
+            <img src="{{ image_url if image_url else url_for('static', filename='/images/avatar.jpg') }}" alt="Profile" onclick="toggleDropdown()">
+            <div id="myDropdown" class="dropdown-content">
+                <a href="/profile">Dashboard</a>
+                <a href="/evaluation">Antique evaluation</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </header>
     <div class="container-fluid">
         <div class="row">
             <div class="login d-flex align-items-center py-5">
@@ -160,7 +262,6 @@
                             <h3 class="login-heading mb-4">Evaluate An Antique!</h3>
                         </div>
                         <div class="form-container">
-                            <!-- Flash Messages Section Start -->
                             {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
                             {% for category, message in messages %}
@@ -171,10 +272,10 @@
                             {% endfor %}
                             {% endif %}
                             {% endwith %}
-                            <!-- Flash Messages Section End -->
 
                             <form action="{{ url_for('evaluateAntique') }}" method="post" enctype="multipart/form-data"
                                 class="form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                                 <div class="mb-3">
                                     <label for="antique_name" class="form-label">Antique Name:</label>
@@ -199,8 +300,9 @@
                                 <div class="mb-3">
                                     <label for="antique_image" class="form-label">Antique Image:</label>
                                     <small class="form-text text-muted">Image size: 1024 x 1024</small>
-                                    <input type="file" class="form-control" id="antique_image" name="antique_image" required>
-                                </div>                                
+                                    <input type="file" class="form-control" id="antique_image" name="antique_image"
+                                        required>
+                                </div>
                                 <div class="mb-3">
                                     <label for="preferred_contact_method" class="form-label">Preferred Method of Contact
                                         (Select from Dropdown):</label>
@@ -225,4 +327,5 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

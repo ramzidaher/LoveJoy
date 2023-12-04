@@ -13,12 +13,14 @@ from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy import create_engine, MetaData, Table
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-
-
-
-
-
-
+from email_validator import validate_email, EmailNotValidError
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_wtf.csrf import CSRFProtect
+import imghdr
+import pymemcache.client.hash
+import logging
+from logging.handlers import RotatingFileHandler
 
 
 
@@ -27,21 +29,33 @@ app = Flask(__name__)
 
 
 # Database Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/ramzidaher/Desktop/LoveJoy/instance/users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your_secret_key'  # Change to a random secret key
+# app.secret_key = os.environ.get('2e2ccdcef15c5a71fd7ba1ffa6f3a3d0')
+app.secret_key = '2e2ccdcef15c5a71fd7ba1ffa6f3a3d0'
+
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_USERNAME')  # Set as environment variable
-app.config['MAIL_PASSWORD'] = os.environ.get('GMAIL_PASSWORD')  # Set as environment variable
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
+# app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_USERNAME')  # Set as environment variable
+# app.config['MAIL_PASSWORD'] = os.environ.get('GMAIL_PASSWORD')  # Set as environment variable
+# app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_USERNAME'] = 'ramzi.daher@gmail.com'  # Set as environment variable
+app.config['MAIL_PASSWORD'] = 'vykn rhhe dpxw glsy'  # Set as environment variable
+app.config['MAIL_DEFAULT_SENDER'] = 'ramzi.daher@gmail.com'
 
 
+# Initialize limiter
+limiter = Limiter(
+    key_func=get_remote_address,  # Use the remote address of the client as the rate limit key
+    app=app,
+    default_limits=["200 per day", "50 per hour"]  # Default limits
+)
 
-
+# Initialize CSRF protection
+csrf = CSRFProtect(app)
 
 
 mail = Mail(app)
@@ -64,10 +78,23 @@ app.config['UPLOAD_FOLDER_EVALUATION'] = UPLOAD_FOLDER_EVALUATION
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB limit
 MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB
 
+ALLOWED_MIME_TYPES = {'image/png', 'image/jpeg', 'image/gif'}
+
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
 
+# Setup logging
+if not app.debug:
+    file_handler = RotatingFileHandler('flask_app.log', maxBytes=10240, backupCount=10)
+    file_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    ))
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('Flask application startup')
+    
 #All classes#
 
 # User Model
@@ -104,19 +131,20 @@ class Antique(db.Model):
         return f'<Antique {self.name}>'
 
 
+##THIS GIVES ERROR## HAS BEEN REMOVED SO U CAN CREATE DB MANULALLY THROUGH CLI##
 # @app.before_first_request
 # def create_tables():
 #     db.create_all()
 
 # Create the database tables before the first request# Function to check allowed file extensions
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 #Main route page (landingpage)
 @app.route('/')
 def home():
-    return render_template('LandingPage.html')
-
+    if 'user_id' not in session:
+        return render_template('LandingPage.html')
+    return redirect(url_for('homepage'))
 
 
 
@@ -135,7 +163,15 @@ def confirm_reset_token(token, expiration=1800):
 @app.route('/register', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        email = request.form['email']
+        email = request.form['email'].strip()
+                # Validate email format
+                
+        try:
+            valid = validate_email(email)
+            email = valid.email  # Update with the normalized form
+        except EmailNotValidError:
+            flash('Invalid email format', 'error')
+            return redirect(url_for('signup'))
         
         # Check if the email is already registered
         existing_user = User.query.filter_by(email=email).first()
@@ -149,7 +185,7 @@ def signup():
         contact = request.form['contact']
 
         profile_pic = request.files.get('profile-pic')
-        if profile_pic and allowed_file(profile_pic.filename):
+        if profile_pic and allowed_file(profile_pic):                   
             filename = secure_filename(profile_pic.filename)
             profile_pic.save(os.path.join(app.config['UPLOAD_FOLDER_PROFILE'], filename))
             profile_pic_url = url_for('static', filename='uploads/profilepics/' + filename)
@@ -163,8 +199,8 @@ def signup():
         return redirect(url_for('login'))  
     return render_template('register.html')
 
-
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")  # Limit to 5 requests per minute
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -172,20 +208,25 @@ def login():
         remember_me = request.form.get('remember_me')  
         
         user = User.query.filter_by(email=username).first()
-        if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id
-            session['username'] = user.name
+        if user:
+            if check_password_hash(user.password, password):
+                session['user_id'] = user.id
+                session['username'] = user.name
 
-        
-            if remember_me:
-                session.permanent = True
-                app.permanent_session_lifetime = timedelta(days=30) 
+                if remember_me:
+                    session.permanent = True
+                    app.permanent_session_lifetime = timedelta(days=30) 
 
-            return redirect(url_for('profiledb'))
+                return redirect(url_for('homepage'))
+            else:
+                # Password doesn't match
+                flash('Invalid password. Please try again.', 'error')
         else:
-            return render_template('login.html', error="Invalid username or password")
+            # User not found
+            flash('Email not registered. Please check your email or register.', 'error')
 
     return render_template('login.html')
+
 
 #Logs out the userand ends session
 @app.route('/logout')
@@ -194,69 +235,73 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/evaluation', methods=['GET', 'POST'])
-def evaluateAntique():           
+def evaluateAntique():    
+    image_url = None  # Initialize image_url to a default value
+
+
     if 'user_id' not in session:
         return render_template('login.html')
     
     current_user_id = session['user_id']
     current_user = User.query.filter_by(id=current_user_id).first()
     if not current_user:
-        # Handle case where current_user is not found
         flash("User not found.", "error")
-        return redirect(url_for('login'))  # Redirect to login page
-
+        return redirect(url_for('login'))
+    image_url = current_user.image_url
     if request.method == 'POST':
         anti_name = request.form['antique_name']
         anti_description = request.form['antique_description']
         request_anti = request.form['antique_request']
         anti_age = request.form['antique_est_age']
-        prefered_method = request.form['preferred_contact_method']
+        preferred_method = request.form['preferred_contact_method']
 
-
-
-        # Handle file upload
         antique_image = request.files['antique_image']
-        if antique_image.filename == '':
+        if not antique_image or antique_image.filename == '':
             flash('No selected file', 'error')
             return redirect(request.url)
+    
+        if not allowed_file(antique_image):  # This is the correct check
+            flash('Invalid file type or size', 'error')
+            return redirect(request.url)
+    
+        filename = secure_filename(antique_image.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER_EVALUATION'], filename)
+        antique_image.save(filepath)
 
-        if antique_image and allowed_file(antique_image.filename):
-            filename = secure_filename(antique_image.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER_EVALUATION'], filename)
-            antique_image.save(filepath)
+        # Open the image and check dimensions
+        with Image.open(filepath) as img:
+            width, height = img.size
 
-            # Open the image and check dimensions
-            with Image.open(filepath) as img:
-                width, height = img.size
+        max_width = 1024
+        max_height = 1024
 
-            max_width = 1024
-            max_height = 1024
+        if width > max_width or height > max_height:
+            flash('Image dimensions exceed the allowed limit.', 'error')
+            os.remove(filepath)  # Remove the saved image as it is not valid
+            return redirect(request.url)
 
-            if width > max_width or height > max_height:
-                flash('Image dimensions exceed the allowed limit.', 'error')
-                os.remove(filepath)  # Remove the saved image as it is not valid
-                return redirect(request.url)
+        # Create and save the Antique object
+        new_antique = Antique(
+            name=anti_name,
+            description=anti_description,
+            request=request_anti,
+            age=anti_age,
+            image_url=filename,
+            user_id=current_user_id,
+            contact_method=preferred_method,
+            status='Pending'
+        )
 
-            # Create and save the Antique object
-            new_antique = Antique(
-                name=anti_name,
-                description=anti_description,
-                request=request_anti,
-                age=anti_age,   
-                image_url=filename,
-                user_id=current_user_id,  # Set the user_id field
-                contact_method=prefered_method,
-                status='Pending'  # Set the default status for new antiques
 
-            )
-            db.session.add(new_antique)
-            db.session.commit()
-            flash("Antique successfully uploaded for evaluation!", "success")
-            return render_template('antiquebeingevaluated.html')
-        else:
-            flash('Invalid file type', 'error')
+        db.session.add(new_antique)
+        db.session.commit()
+        flash("Antique successfully uploaded for evaluation!", "success")
+        return render_template('antiquebeingevaluated.html')
+    
 
-    return render_template('evaluation.html')
+    return render_template('evaluation.html', image_url=image_url)
+
+
 
 
 
@@ -293,34 +338,46 @@ def profiledb():
 
 
 
-# # SHOULD NOT BE ACCESSIBLE!!!!!!###
-# @app.route('/make_admin/<int:user_id>')
-# def make_admin(user_id):
-#     user = User.query.get(user_id)
-#     if user:
-#         user.is_admin = True
-#         db.session.commit()
-#         return f"User {user.name} is now an admin."
-#     else:
-#         return "User not found", 404
+@app.route('/home')
+def homepage():
+    is_logged_in = 'user_id' in session
+    image_url = None
+    if is_logged_in:
+        current_user_id = session['user_id']
+        current_user = User.query.filter_by(id=current_user_id).first()
+        image_url = current_user.image_url
+
+    all_antiques = Antique.query.all()  # Fetching all antiques
+
+    return render_template('homepage.html', image_url=image_url, is_logged_in=is_logged_in, all_antiques=all_antiques)
+
+
+
+from flask import render_template
 
 @app.route('/admin/')
 def admin():
     if 'user_id' not in session or not User.query.get(session['user_id']).is_admin:
         return redirect(url_for('login'))
 
-    users = User.query.all()
-    
-    # Filtering admin users and regular users
-    admin_users = [user for user in users if user.is_admin]
-    regular_users = [user for user in users if not user.is_admin]
+    # Retrieve all admin users and regular users
+    admin_users = User.query.filter_by(is_admin=True).all()
+    regular_users = User.query.filter_by(is_admin=False).all()
 
     # Counting admin users and regular users
-    total_users = len(users)
+    total_users = User.query.count()
     total_admins = len(admin_users)
     total_regular_users = len(regular_users)
-        
-    return render_template('admin.html', total_users=total_users, total_admins=total_admins, total_regular_users=total_regular_users)
+
+    # Retrieve all antiques from the database and their respective user names
+    antiques = Antique.query.all()
+
+    # Create a dictionary to store user names by user ID
+    user_names = {user.id: user.name for user in admin_users + regular_users}
+
+    return render_template('admin.html', total_users=total_users, total_admins=total_admins, total_regular_users=total_regular_users, antiques=antiques, user_names=user_names)
+
+
 
 
 
@@ -399,6 +456,66 @@ def promote_admin(email):
         click.echo("User not found.")
 
 
+
+
+
+def allowed_file(file_storage):
+    if not file_storage:
+        return False  # No file provided
+    # Check if the file extension is allowed
+    filename = file_storage.filename
+    is_allowed_extension = '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
+    # Ensure the file size is within the limit
+    file_storage.seek(0, os.SEEK_END)
+    file_size = file_storage.tell()
+    is_allowed_size = file_size <= MAX_FILE_SIZE
+    file_storage.seek(0)  # Reset file pointer
+
+    # Check the file's content type (for images)
+    file_content_type = imghdr.what(None, h=file_storage.read(MAX_FILE_SIZE))
+    file_storage.seek(0)  # Reset file pointer
+    is_allowed_content_type = 'image/' + file_content_type in ALLOWED_MIME_TYPES
+    
+    return is_allowed_extension and is_allowed_size and is_allowed_content_type
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return "Rate limit exceeded", 429
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # pass the error to the template
+    return render_template('error.html', error=e), 500
+
+@app.route('/admin/dashboard/update_status/<int:antique_id>', methods=['POST'])
+def update_status(antique_id):
+    if 'user_id' not in session or not User.query.get(session['user_id']).is_admin:
+        return redirect(url_for('login'))
+
+    antique = Antique.query.get(antique_id)
+    if antique:
+        antique.status = "Accepted"
+        db.session.commit()
+        flash(f'Antique "{antique.name}" has been accepted.', 'success')
+    else:
+        flash('Antique not found.', 'warning')
+
+    return redirect(url_for('admin_dashboard'))
+
+
 # Start the Flask application
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Create database tables for our data models
     app.run(debug=True)

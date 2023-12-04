@@ -452,13 +452,31 @@
             /* Or choose a color that fits your design */
             font-size: 0.9em;
         }
+
+        .home-button-container {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            /* Ensures the button stays on top of other elements */
+        }
+
+        .btn-home {
+            background-color: white;
+            /* White background */
+            color: black;
+            /* Black text */
+            border: 1px solid #555;
+            /* Optional: adds a subtle border for better visibility */
+        }
     </style>
 </head>
 
 <body>
-
+    <div class="home-button-container">
+        <a href="/home" class="btn btn-home">Back To Home</a>
+    </div>
     <div class="dashboard">
-        <!-- Check if image_url is set, else display default profile image -->
         <img src="{{ image_url if image_url else url_for('static', filename='/images/avatar.jpg') }}"
             alt="Profile Picture" class="profile-pic">
         <div class="profile-db">
@@ -475,7 +493,7 @@
                         <button class="btn">Logout</button>
                     </a>
                     {% if is_admin %}
-                    <a href="/admin/dashboard">
+                    <a href="/admin">
                         <button class="btn">Admin Dashboard</button>
                     </a>
                     {% endif %}
@@ -498,7 +516,6 @@
                     src="{{ url_for('static', filename='uploads/evaluation/' + antique.image_url) }}"
                     alt="{{ antique.name }}">
                 {% else %}
-                <!-- Display default image when antique.image_url is null -->
                 <img class="hero-image" src="{{ url_for('static', filename='images/default-antique.jpg') }}"
                     alt="Default Antique Image">
                 {% endif %}
@@ -507,8 +524,6 @@
                 <h1><a href="#">{{ antique.name }}</a></h1>
                 <h2>Antique Description</h2>
                 <p>{{ antique.description }}</p>
-                <!-- <h3>Antique Request</h3>
-                <p>{{ antique.request }}</p> -->
                 <div class="antique-age">
                     <span class="age-label">Age:</span>
                     <span class="age-value">{{ antique.age }} years</span>
@@ -518,24 +533,11 @@
 
 
             <div class="card-attribute">
-                <!-- <img src="/static/images/avatar.jpg" alt="avatar" class="small-avatar" /> -->
-                <!-- <span class="status-badge">Done</span> -->
-                <!-- <span class="status-badge">{{ antique.status }}</span> -->
                 <span
                     class="status-badge {{ 'status-badge-done' if antique.status == 'Done' else 'status-badge-pending' }}">
                     {{ antique.status }}
                 </span>
                 <span class="contact-text">{{ antique.request }}</span>
-
-
-
-                <!-- <div class="contact-method">
-                    <i class="{{ 'fa fa-envelope' if antique.contact_method == 'email' else 'fa fa-phone' }}"
-                        aria-hidden="true"></i>
-                    <span class="contact-text">{{ antique.contact_method }}</span>
-                </div> -->
-
-
             </div>
         </div>
         {% endfor %}
@@ -559,7 +561,6 @@
         document.querySelectorAll('.status-badge').forEach(function (badge) {
             badge.addEventListener('click', function () {
                 alert("Status: " + this.innerText);
-                // Or any other interaction you want
             });
         });
 

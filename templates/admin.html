@@ -136,7 +136,6 @@
         h2 {
             font: var(--var-small-heading);
             color: var(--var-lightest);
-            /* padding on .coin-base */
         }
 
         p {
@@ -268,7 +267,6 @@
         }
 
         .user-card {
-            /* Flex container */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -276,16 +274,12 @@
         }
 
         .button-container {
-            /* Container for buttons */
             display: flex;
             justify-content: center;
-            /* Center buttons horizontally */
             gap: 10px;
-            /* Space between buttons */
         }
 
         .btn {
-            /* Button styling */
             background-color: #041E20;
             color: white;
             padding: 10px 20px;
@@ -293,34 +287,27 @@
             border-radius: 4px;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
-            /* Smooth transition for hover effect */
         }
 
         .btn:hover {
-            /* Button hover effect */
             transform: translateY(-5px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             background-color: #555;
-            /* Slightly darker background on hover */
             color: white;
-            /* Keep text color white on hover */
         }
 
         @media screen and (max-width: 600px) {
             .button-container {
                 flex-direction: column;
-                /* Stack buttons vertically on smaller screens */
                 width: 100%;
             }
 
             .btn {
                 width: 100%;
-                /* Full width for smaller screens */
             }
         }
 
 
-        /* Styles for hidden menu */
         .menu-hidden {
             opacity: 0;
             max-height: 0;
@@ -331,7 +318,6 @@
         .menu-visible {
             opacity: 1;
             max-height: 200px;
-            /* Adjust as needed based on content */
             transition: opacity 0.5s, max-height 0.5s;
         }
 
@@ -339,16 +325,13 @@
         .menu-visible {
             margin: 20px auto;
             max-width: 600px;
-            /* Adjust as needed */
             background: #f0f0f0;
-            /* Same as user-card */
             border-radius: 8px;
             box-shadow: rgba(209, 201, 201, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
             padding: 20px;
             transition: opacity 0.5s, max-height 0.5s;
         }
 
-        /* Styles for hidden menu */
         .menu-hidden {
             opacity: 0;
             max-height: 0;
@@ -359,16 +342,13 @@
         .menu-visible {
             opacity: 1;
             max-height: 1000px;
-            /* Adjust as needed based on content */
             transition: opacity 0.5s, max-height 0.5s;
         }
 
-        /* Adjustments for form inputs */
         .form-control {
             border-radius: 4px;
         }
 
-        /* Button styling */
         .btn-primary {
             background-color: #666;
             border-color: #666;
@@ -379,7 +359,6 @@
             border-color: #041E20;
         }
 
-        /* Right Sidebar style */
         .sidebar {
             background-color: #333;
             color: white;
@@ -387,7 +366,7 @@
             padding: 20px;
             width: 250px;
             position: fixed;
-            right: 0; /* Sidebar on the right */
+            right: 0;
             top: 0;
             bottom: 0;
         }
@@ -405,18 +384,16 @@
             background-color: #555;
         }
 
-        /* Adjust main content position */
         body {
             display: flex;
         }
 
         .dashboard {
-            margin-right: 250px; /* same as sidebar width */
+            margin-right: 250px;
             flex: 1;
             padding: 20px;
         }
 
-        /* Admin-specific styles */
         .admin-card {
             background-color: #eee;
             padding: 20px;
@@ -437,13 +414,12 @@
 
 <body>
 
-        <!-- Sidebar for navigation -->
-        <div class="sidebar">
-            <h2>Admin Menu</h2>
-            <a href="/admin/dashboard/users">Manage Users</a>
-            <a href="/admin/settings">Settings</a>
-            <a href="/logout">Logout</a>
-        </div>
+    <div class="sidebar">
+        <h2>Admin Menu</h2>
+        <a href="/admin/dashboard/users">Manage Users</a>
+        <a href="/admin/settings">Settings</a>
+        <a href="/logout">Logout</a>
+    </div>
 
     <div class="dashboard">
         <div class="admin-card">
@@ -452,6 +428,58 @@
             <p>Number of Admin's: {{ total_admins }}</p>
             <p>Number of Regular Users: {{ total_regular_users }}</p>
 
+        </div>
+
+        <div class="dashboard">
+            <div class="admin-card">
+                <h3>Admin Dashboard</h3>
+
+                <!-- Table to display antiques -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>User Name</th> 
+                            <th>Antique Name</th>
+                            <th>Description</th>
+                            <th>Request</th>
+                            <th>Age</th>
+                            <th>Origin</th>
+                            <th>Condition</th>
+                            <th>Image</th>
+                            <th>Contact Method</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for antique in antiques %}
+                        <tr>
+                            <td>{{ user_names[antique.user_id] }}</td> <!-- Display user name in each row -->
+                            <td>{{ antique.name }}</td>
+                            <td>{{ antique.description }}</td>
+                            <td>{{ antique.request }}</td>
+                            <td>{{ antique.age }}</td>
+                            <td>{{ antique.origin }}</td>
+                            <td>{{ antique.condition }}</td>
+                            <td><img src="{{ antique.image_url }}" alt="Antique Image" width="100"></td>
+                            <td>{{ antique.contact_method }}</td>
+                            <td>{{ antique.status }}</td>
+                            <td>
+                                {% if antique.status == "Pending" %}
+                                <form method="post" action="{{ url_for('update_status', antique_id=antique.id) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-success">Accept</button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+
+            </div>
         </div>
     </div>
 </body>

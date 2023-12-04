@@ -53,14 +53,12 @@
 
         #signup-form {
             background-color: #fff;
-            /* max-width: 400px; */
             margin: 50px auto;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             max-width: none;
-            /* Or you can use 100% */
             width: 100%;
         }
 
@@ -93,7 +91,6 @@
         input[type="email"]:focus,
         input[type="tel"]:focus {
             border-color: #5e503f;
-            /* Focus color */
         }
 
         button {
@@ -210,14 +207,11 @@
             color: white;
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            /* Add transition for smooth effect */
         }
 
         #customButton:hover {
             transform: scale(1.05);
-            /* Slightly increase the size */
             box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.3);
-            /* Optional: Enhance the shadow for more depth */
         }
     </style>
     <script>
@@ -286,7 +280,6 @@
                                         style="max-width: 300px;">
                                     <h3 class="login-heading mb-4">Lets Get You Registered!</h3>
                                 </div>
-                                <!-- Inside your <body> tag, preferably near the form -->
                                 {% with messages = get_flashed_messages(category_filter=["error"]) %}
                                 {% if messages %}
                                     <div class="alert alert-danger">
@@ -299,6 +292,8 @@
                                 <div id="signup-form">
                                     <form action="/register" method="post" enctype="multipart/form-data"
                                         onsubmit="return validatePassword(event)">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                                         <div class="form-group">
                                             <label for="name">Name:</label>
                                             <input type="text" id="name" name="name" required>
