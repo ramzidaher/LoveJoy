@@ -313,7 +313,7 @@ def profiledb():
         return redirect(url_for('home')) 
     
     # Initialize variables
-    name = email = tel = None
+    name = email = tel = image_url= is_admin=None
     current_user_antiques = []
 
     if 'user_id' in session:
@@ -341,15 +341,19 @@ def profiledb():
 @app.route('/home')
 def homepage():
     is_logged_in = 'user_id' in session
-    image_url = None
+    image_url = None  # Assign a default value to image_url
+
     if is_logged_in:
         current_user_id = session['user_id']
         current_user = User.query.filter_by(id=current_user_id).first()
-        image_url = current_user.image_url
+        if current_user is not None:
+            image_url = current_user.image_url
 
     all_antiques = Antique.query.all()  # Fetching all antiques
 
     return render_template('homepage.html', image_url=image_url, is_logged_in=is_logged_in, all_antiques=all_antiques)
+
+
 
 
 
