@@ -1,0 +1,102 @@
+2023-12-04 20:52:17,902 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:490]
+2023-12-04 20:52:38,173 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:490]
+2023-12-04 20:52:38,439 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:490]
+2023-12-04 20:52:41,228 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:139]
+2023-12-04 21:16:38,871 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:16:55,497 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:16:55,794 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:19:30,241 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:24:35,152 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:26:11,619 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:27:40,738 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:27:41,008 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:29:37,322 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:30:09,983 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:30:37,225 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:32:27,885 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:32:28,147 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:32:58,555 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:34:10,979 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:34:56,789 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:40:29,699 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:42:24,659 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:48:53,261 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 21:48:53,516 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:02:35,446 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:02:35,778 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:02:54,510 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:03:28,080 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:06:36,324 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:06:48,796 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:07:55,321 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:07:57,887 ERROR: Exception on /admin/ [GET] [in /home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py:1744]
+Traceback (most recent call last):
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 2529, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1823, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/ramzidaher/Desktop/LoveJoy/main.py", line 378, in admin
+    return render_template('admin.html', total_users=total_users, total_admins=total_admins, total_regular_users=total_regular_users, antiques=antiques, user_names=user_names)
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/templating.py", line 146, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/jinja2/environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/jinja2/environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/jinja2/environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/jinja2/loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/jinja2/environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "/home/ramzidaher/.local/lib/python3.10/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/ramzidaher/Desktop/LoveJoy/templates/admin.html", line 464, in template
+    <td><img src="{{ /uploads/evaluation/ + antique.image_url }}" alt="Antique Image" width="100"></td>
+jinja2.exceptions.TemplateSyntaxError: unexpected '/'
+2023-12-04 23:08:47,251 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:12:14,417 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:12:32,459 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:12:41,409 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:13:32,956 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:13:33,221 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:14:47,665 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:14:49,252 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:14:49,513 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:15:41,005 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:16:27,940 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:16:47,555 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:16:47,847 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:17:28,239 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:17:43,131 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:18:45,499 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:18:45,764 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:19:40,159 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:19:42,352 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:36:31,001 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-04 23:41:30,896 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 11:27:35,107 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:08:37,466 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:08:37,734 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:09:31,591 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:10:38,209 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:10:38,511 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:12:29,818 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:12:30,117 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:13:52,254 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:13:52,539 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:33:44,175 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:33:44,500 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:34:08,185 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:34:08,459 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:59:44,658 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 12:59:44,934 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 13:11:07,317 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 13:11:07,590 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 13:17:31,579 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 13:19:38,162 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
+2023-12-05 13:19:38,497 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]

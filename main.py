@@ -421,19 +421,25 @@ def reset_request():
 
 @app.route('/reset/<token>', methods=["GET", "POST"])
 def reset_token(token):
+    email = confirm_reset_token(token)
+    if not email:
+        # Token is invalid or expired
+        flash('Token is invalid or expired!', 'warning')
+        return redirect(url_for('reset_request'))
+
     if request.method == "POST":
-        email = confirm_reset_token(token)
-        if email:
-            user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
+        if user:
             user.password = generate_password_hash(request.form['password'])
             db.session.commit()
             flash('Your password has been updated!', 'success')
-            print('Your password has been update')
             return redirect(url_for('login'))
         else:
-            flash('That is an invalid or expired token', 'warning')
+            flash('User not found.', 'error')
             return redirect(url_for('reset_request'))
+
     return render_template('reset_token.html')
+
 
 @app.cli.command("promote-admin")
 @click.argument("email")
@@ -517,6 +523,43 @@ def update_status(antique_id):
 
     return redirect(url_for('admin_dashboard'))
 
+
+@app.route('/admin/antiques')
+def manage_antiques():
+    if 'user_id' not in session or not User.query.get(session['user_id']).is_admin:
+        return redirect(url_for('login'))
+
+    antiques = Antique.query.all()  # Fetching all antiques from the database
+
+    return render_template('manage_antiques.html', antiques=antiques)
+
+
+@app.route('/admin/antiques/edit/<int:antique_id>', methods=['GET', 'POST'])
+def edit_antique(antique_id):
+    antique = Antique.query.get_or_404(antique_id)
+    
+    if request.method == 'POST':
+        # Update antique details based on form input
+        antique.name = request.form['name']
+        antique.description = request.form['description']
+        antique.age = request.form['age']
+        # ... include other fields as necessary ...
+
+        db.session.commit()
+        flash('Antique updated successfully.', 'success')
+        return redirect(url_for('manage_antiques'))
+    
+    return render_template('edit_antique.html', antique=antique)
+
+@app.route('/admin/antiques/delete/<int:antique_id>', methods=['POST'])
+def delete_antique(antique_id):
+    antique = Antique.query.get_or_404(antique_id)
+
+    db.session.delete(antique)
+    db.session.commit()
+    flash('Antique deleted successfully.', 'success')
+    
+    return redirect(url_for('manage_antiques'))
 
 # Start the Flask application
 if __name__ == '__main__':

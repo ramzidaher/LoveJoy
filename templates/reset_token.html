@@ -59,24 +59,90 @@
                 font-size: 1em;
             }
         }
+        .password-requirements {
+            margin-top: 10px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .password-requirement {
+            color: #888;
+            font-size: 0.8em;
+        }
+
+        .password-requirement.valid {
+            color: green;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="message">
-            Reset Password
-        </div>
-        <form method="post" class="browse-message">
+        <div class="message">Password Reset Request</div>
+        <p class="browse-message">Enter your email address and we'll send you a link to reset your password.</p>
+        <form method="post" class="browse-message" onsubmit="return validatePassword(event)">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-            <label for="password">New Password:</label><br>
-            <input type="password" id="password" name="password" placeholder="New Password" required><br>
-
-            <label for="password2">Confirm New Password:</label><br>
-            <input type="password" id="password2" name="password2" placeholder="Repeat Password" required><br>
-
-            <button type="submit" class="browse-btn">Reset Password</button>
+            <input type="password" id="password" name="password" placeholder="New Password" required oninput="checkPasswordStrength()">
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm New Password" required oninput="checkPasswordsMatch()">
+            <ul class="password-requirements">
+                <li id="min-length" class="password-requirement">At least 8 characters</li>
+                <li id="uppercase" class="password-requirement">At least one uppercase letter</li>
+                <li id="lowercase" class="password-requirement">At least one lowercase letter</li>
+                <li id="number" class="password-requirement">At least one number</li>
+                <li id="special-char" class="password-requirement">At least one special character ($@#&!)</li>
+            </ul>
+            <p id="password-match" style="font-size: 0.8em;">Passwords do not match.</p>
+            <button type="submit" class="browse-btn">Send Reset Link</button>
         </form>
     </div>
+
+    <!-- Copied JavaScript from html1 -->
+    <script>
+        function checkPasswordStrength() {
+            var password = document.getElementById("password").value;
+            var minLength = document.getElementById("min-length");
+            var uppercase = document.getElementById("uppercase");
+            var lowercase = document.getElementById("lowercase");
+            var number = document.getElementById("number");
+            var specialChar = document.getElementById("special-char");
+
+            minLength.classList.toggle('valid', password.length >= 8);
+            uppercase.classList.toggle('valid', /[A-Z]/.test(password));
+            lowercase.classList.toggle('valid', /[a-z]/.test(password));
+            number.classList.toggle('valid', /[0-9]/.test(password));
+            specialChar.classList.toggle('valid', /[$@#&!]/.test(password));
+            checkPasswordsMatch();
+        }
+
+        function checkPasswordsMatch() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+            var matchMessage = document.getElementById("password-match");
+
+            if (password === confirmPassword && password.length > 0) {
+                matchMessage.textContent = "Passwords match.";
+                matchMessage.style.color = "green";
+            } else {
+                matchMessage.textContent = "Passwords do not match.";
+                matchMessage.style.color = "red";
+            }
+        }
+
+        function validatePassword(event) {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[$@#&!]/.test(password)) {
+                alert("Password does not meet the strength requirements.");
+                event.preventDefault();
+                return false;
+            }
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>
