@@ -213,6 +213,24 @@
             transform: scale(1.05);
             box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.3);
         }
+
+        select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #fff;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1em;
+            color: #333;
+        }
+
+        select:focus {
+            border-color: #5e503f;
+            outline: none;
+        }
     </style>
     <script>
         function checkPasswordStrength() {
@@ -282,11 +300,11 @@
                                 </div>
                                 {% with messages = get_flashed_messages(category_filter=["error"]) %}
                                 {% if messages %}
-                                    <div class="alert alert-danger">
-                                        {% for message in messages %}
-                                            {{ message }}
-                                        {% endfor %}
-                                    </div>
+                                <div class="alert alert-danger">
+                                    {% for message in messages %}
+                                    {{ message }}
+                                    {% endfor %}
+                                </div>
                                 {% endif %}
                                 {% endwith %}
                                 <div id="signup-form">
@@ -324,7 +342,46 @@
                                                 required oninput="checkPasswordsMatch()">
                                             <p id="password-match" style="font-size: 0.8em;">Passwords do not match.</p>
                                         </div>
+                                        <!-- Security Question 1 -->
+                                        <div class="form-group">
+                                            <label for="security-question1">Security Question 1:</label>
+                                            <select id="security-question1" name="security-question1" required>
+                                                <option value="">Select a question...</option>
+                                                <option value="birthplace">What city were you born in?</option>
+                                                <option value="firstpet">What was the name of your first pet?</option>
+                                                <option value="childhoodnickname">What was your childhood nickname?
+                                                </option>
+                                            </select>
+                                            <input type="text" id="security-answer1" name="security-answer1" required>
+                                        </div>
 
+                                        <!-- Security Question 2 -->
+                                        <div class="form-group">
+                                            <label for="security-question2">Security Question 2:</label>
+                                            <select id="security-question2" name="security-question2" required>
+                                                <option value="">Select a question...</option>
+                                                <option value="mothermaiden">What is your mother's maiden name?</option>
+                                                <option value="firstcar">What was the make and model of your first car?
+                                                </option>
+                                                <option value="favoritesport">What was your favorite sport in high
+                                                    school?</option>
+                                            </select>
+                                            <input type="text" id="security-answer2" name="security-answer2" required>
+                                        </div>
+
+                                        <!-- Security Question 3 -->
+                                        <div class="form-group">
+                                            <label for="security-question3">Security Question 3:</label>
+                                            <select id="security-question3" name="security-question3" required>
+                                                <option value="">Select a question...</option>
+                                                <option value="firstjob">What was your first job?</option>
+                                                <option value="childhoodfriend">What is the name of your childhood best
+                                                    friend?</option>
+                                                <option value="dreamvacation">What is your dream vacation destination?
+                                                </option>
+                                            </select>
+                                            <input type="text" id="security-answer3" name="security-answer3" required>
+                                        </div>
                                         <div class="form-group">
                                             <label for="contact">Contact Number:</label>
                                             <input type="tel" id="contact" name="contact">

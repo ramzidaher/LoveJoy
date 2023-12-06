@@ -21,6 +21,9 @@ import imghdr
 import pymemcache.client.hash
 import logging
 from logging.handlers import RotatingFileHandler
+from flask_recaptcha import ReCaptcha
+from markupsafe import Markup
+from cryptography.fernet import Fernet
 
 
 
@@ -80,9 +83,19 @@ MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB
 
 ALLOWED_MIME_TYPES = {'image/png', 'image/jpeg', 'image/gif'}
 
+# In your Flask app configuration
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcGQScpAAAAAIA0NIiXNSn42ksvCgO460nzJH02'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcGQScpAAAAANOHR6LLLuLzu1FEVYH_sjCBj0Yx'
+
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
+
+
+# key = os.environ.get('FERNET_KEY')
+# cipher_suite = Fernet(key)
+
+
 
 # Setup logging
 if not app.debug:
@@ -107,6 +120,12 @@ class User(db.Model):
     image_url = db.Column(db.String(300), nullable=True) 
     image_data = db.Column(db.LargeBinary)  
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
+    security_question1 = db.Column(db.String(300), nullable=True)
+    security_answer1 = db.Column(db.String(300), nullable=True)
+    security_question2 = db.Column(db.String(300), nullable=True)
+    security_answer2 = db.Column(db.String(300), nullable=True)
+    security_question3 = db.Column(db.String(300), nullable=True)
+    security_answer3 = db.Column(db.String(300), nullable=True)
 
 
     def __repr__(self):
@@ -137,6 +156,7 @@ class Antique(db.Model):
 #     db.create_all()
 
 # Create the database tables before the first request# Function to check allowed file extensions
+
 
 
 #Main route page (landingpage)
@@ -184,6 +204,13 @@ def signup():
         name = request.form['name']
         contact = request.form['contact']
 
+        security_question1 = request.form['security-question1']
+        security_answer1 = request.form['security-answer1']
+        security_question2 = request.form['security-question2']
+        security_answer2 = request.form['security-answer2']
+        security_question3 = request.form['security-question3']
+        security_answer3 = request.form['security-answer3']
+
         profile_pic = request.files.get('profile-pic')
         if profile_pic and allowed_file(profile_pic):                   
             filename = secure_filename(profile_pic.filename)
@@ -192,7 +219,21 @@ def signup():
         else:
             profile_pic_url = None  # Or a default image path
 
-        new_user = User(email=email, password=hashed_password, name=name, contact=contact, image_url=profile_pic_url)
+
+
+        new_user = User(
+            email=email,
+            password=hashed_password,
+            name=name,
+            contact=contact,
+            image_url=profile_pic_url,
+            security_question1=security_question1,
+            security_answer1=security_answer1,
+            security_question2=security_question2,
+            security_answer2=security_answer2,
+            security_question3=security_question3,
+            security_answer3=security_answer3,
+        )
         db.session.add(new_user)
         db.session.commit()
 
@@ -203,6 +244,7 @@ def signup():
 @limiter.limit("5 per minute")  # Limit to 5 requests per minute
 def login():
     if request.method == 'POST':
+        
         username = request.form['username']
         password = request.form['password']
         remember_me = request.form.get('remember_me')  
@@ -503,10 +545,10 @@ def internal_server_error(e):
 def ratelimit_handler(e):
     return "Rate limit exceeded", 429
 
-@app.errorhandler(Exception)
-def handle_exception(e):
-    # pass the error to the template
-    return render_template('error.html', error=e), 500
+# @app.errorhandler(Exception)
+# def handle_exception(e):
+#     # pass the error to the template
+#     return render_template('error.html', error=e), 500
 
 @app.route('/admin/dashboard/update_status/<int:antique_id>', methods=['POST'])
 def update_status(antique_id):
@@ -560,6 +602,8 @@ def delete_antique(antique_id):
     flash('Antique deleted successfully.', 'success')
     
     return redirect(url_for('manage_antiques'))
+
+
 
 # Start the Flask application
 if __name__ == '__main__':
