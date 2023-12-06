@@ -24,6 +24,8 @@ from logging.handlers import RotatingFileHandler
 from flask_recaptcha import ReCaptcha
 from markupsafe import Markup
 from cryptography.fernet import Fernet
+import random
+import datetime
 
 
 
@@ -34,10 +36,7 @@ app = Flask(__name__)
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/ramzidaher/Desktop/LoveJoy/instance/users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.secret_key = os.environ.get('2e2ccdcef15c5a71fd7ba1ffa6f3a3d0')
 app.secret_key = '2e2ccdcef15c5a71fd7ba1ffa6f3a3d0'
-
-
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -48,21 +47,10 @@ app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'ramzi.daher@gmail.com'  # Set as environment variable
 app.config['MAIL_PASSWORD'] = 'vykn rhhe dpxw glsy'  # Set as environment variable
 app.config['MAIL_DEFAULT_SENDER'] = 'ramzi.daher@gmail.com'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB limit
 
-
-# Initialize limiter
-limiter = Limiter(
-    key_func=get_remote_address,  # Use the remote address of the client as the rate limit key
-    app=app,
-    default_limits=["200 per day", "50 per hour"]  # Default limits
-)
-
-# Initialize CSRF protection
-csrf = CSRFProtect(app)
-
-
-mail = Mail(app)
-
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcGQScpAAAAAIA0NIiXNSn42ksvCgO460nzJH02'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcGQScpAAAAANOHR6LLLuLzu1FEVYH_sjCBj0Yx'
 
 
 
@@ -71,30 +59,34 @@ UPLOAD_FOLDER = 'static/uploads'
 UPLOAD_FOLDER_PROFILE = 'static/uploads/profilepics'
 UPLOAD_FOLDER_EVALUATION = 'static/uploads/evaluation'
 
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
 app.config['UPLOAD_FOLDER_EVALUATION'] = UPLOAD_FOLDER_EVALUATION
 
 
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB limit
 MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB
 
 ALLOWED_MIME_TYPES = {'image/png', 'image/jpeg', 'image/gif'}
 
-# In your Flask app configuration
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcGQScpAAAAAIA0NIiXNSn42ksvCgO460nzJH02'
-app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcGQScpAAAAANOHR6LLLuLzu1FEVYH_sjCBj0Yx'
-
-
+# INITIALIZATION #
+# Initialize limiter
+limiter = Limiter(
+    key_func=get_remote_address,  # Use the remote address of the client as the rate limit key
+    app=app,
+    default_limits=["200 per day", "50 per hour"]  # Default limits
+)
+# Initialize CSRF protection
+csrf = CSRFProtect(app)
+# Mail Initialize 
+mail = Mail(app)
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
 
 
-# key = os.environ.get('FERNET_KEY')
-# cipher_suite = Fernet(key)
 
+key = os.environ.get('FERNET_KEY')
+cipher_suite = Fernet(key)
 
 
 # Setup logging
@@ -108,8 +100,11 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('Flask application startup')
     
-#All classes#
 
+
+
+
+#All classes#
 # User Model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -126,6 +121,8 @@ class User(db.Model):
     security_answer2 = db.Column(db.String(300), nullable=True)
     security_question3 = db.Column(db.String(300), nullable=True)
     security_answer3 = db.Column(db.String(300), nullable=True)
+    two_factor_code = db.Column(db.String(6), nullable=True)
+    two_factor_expires = db.Column(db.DateTime, nullable=True)
 
 
     def __repr__(self):
@@ -148,16 +145,6 @@ class Antique(db.Model):
 
     def __repr__(self):
         return f'<Antique {self.name}>'
-
-
-##THIS GIVES ERROR## HAS BEEN REMOVED SO U CAN CREATE DB MANULALLY THROUGH CLI##
-# @app.before_first_request
-# def create_tables():
-#     db.create_all()
-
-# Create the database tables before the first request# Function to check allowed file extensions
-
-
 
 #Main route page (landingpage)
 @app.route('/')
@@ -205,11 +192,11 @@ def signup():
         contact = request.form['contact']
 
         security_question1 = request.form['security-question1']
-        security_answer1 = request.form['security-answer1']
+        security_answer1 = encrypt_data(request.form['security-answer1'])
         security_question2 = request.form['security-question2']
-        security_answer2 = request.form['security-answer2']
+        security_answer2 = encrypt_data(request.form['security-answer2'])
         security_question3 = request.form['security-question3']
-        security_answer3 = request.form['security-answer3']
+        security_answer3 = encrypt_data(request.form['security-answer3'])
 
         profile_pic = request.files.get('profile-pic')
         if profile_pic and allowed_file(profile_pic):                   
@@ -252,19 +239,25 @@ def login():
         user = User.query.filter_by(email=username).first()
         if user:
             if check_password_hash(user.password, password):
-                session['user_id'] = user.id
-                session['username'] = user.name
+                # Generate 2FA code
+                user.two_factor_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+                user.two_factor_expires = datetime.datetime.now() + datetime.timedelta(minutes=10)
+                db.session.commit()
+
+                # Send the code via email
+                send_2fa_code_email(user.email, user.two_factor_code)
+
+                # Store user ID in session to retrieve in 2FA verification route
+                session['user_id_2fa'] = user.id
 
                 if remember_me:
                     session.permanent = True
-                    app.permanent_session_lifetime = timedelta(days=30) 
+                    app.permanent_session_lifetime = timedelta(days=30)
 
-                return redirect(url_for('homepage'))
+                return redirect(url_for('two_factor_verify'))
             else:
-                # Password doesn't match
                 flash('Invalid password. Please try again.', 'error')
         else:
-            # User not found
             flash('Email not registered. Please check your email or register.', 'error')
 
     return render_template('login.html')
@@ -603,7 +596,41 @@ def delete_antique(antique_id):
     
     return redirect(url_for('manage_antiques'))
 
+def encrypt_data(data):
+    return cipher_suite.encrypt(data.encode()).decode()
 
+def generate_2fa_code():
+    return ''.join([str(random.randint(0, 9)) for _ in range(6)])
+
+def send_2fa_code_email(email, code):
+    msg = Message("Your 2FA Code", sender=app.config['MAIL_DEFAULT_SENDER'], recipients=[email])
+    msg.body = f"Your two-factor authentication code is: {code}"
+    mail.send(msg)
+
+
+@app.route('/verify_2fa', methods=['GET', 'POST'])
+def two_factor_verify():
+    user_id = session.get('user_id_2fa')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    user = User.query.get(user_id)
+    if not user:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        code = request.form.get('code')
+        if user.two_factor_code == code and datetime.datetime.now() < user.two_factor_expires:
+            # Log the user in
+            session['user_id'] = user.id
+            session['username'] = user.name
+            user.two_factor_code = None  # Clear the 2FA code
+            db.session.commit()
+            return redirect(url_for('homepage'))
+        else:
+            flash('Invalid or expired 2FA code', 'error')
+
+    return render_template('verify_2fa.html')
 
 # Start the Flask application
 if __name__ == '__main__':
