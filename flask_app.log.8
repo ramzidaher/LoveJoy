@@ -1,87 +1,79 @@
-2023-12-05 13:20:29,342 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
-2023-12-05 13:20:53,928 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
-2023-12-05 13:21:06,413 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
-2023-12-05 13:21:51,242 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
-2023-12-05 13:43:30,525 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:96]
-2023-12-05 17:21:25,644 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:104]
-2023-12-05 17:21:27,075 ERROR: Exception on / [GET] [in /home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py:1744]
+2023-12-05 17:34:51,434 ERROR: Exception on / [GET] [in /home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py:825]
 Traceback (most recent call last):
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1823, in full_dispatch_request
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 867, in full_dispatch_request
     rv = self.dispatch_request()
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1799, in dispatch_request
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 852, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
   File "/home/ramzidaher/Desktop/LoveJoy/main.py", line 154, in home
     return render_template('LandingPage.html')
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/templating.py", line 147, in render_template
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/templating.py", line 152, in render_template
     return _render(app, template, context)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/templating.py", line 128, in _render
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/templating.py", line 129, in _render
     app.update_template_context(context)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 997, in update_template_context
-    context.update(func())
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask_recaptcha.py", line 59, in get_code
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 480, in update_template_context
+    context.update(self.ensure_sync(func)())
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask_recaptcha.py", line 59, in get_code
     return dict(recaptcha=Markup(self.get_code()))
 NameError: name 'Markup' is not defined
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 2529, in wsgi_app
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 1455, in wsgi_app
     response = self.full_dispatch_request()
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1825, in full_dispatch_request
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 869, in full_dispatch_request
     rv = self.handle_user_exception(e)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1676, in handle_user_exception
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 759, in handle_user_exception
     return self.ensure_sync(handler)(e)
   File "/home/ramzidaher/Desktop/LoveJoy/main.py", line 522, in handle_exception
     return render_template('error.html', error=e), 500
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/templating.py", line 147, in render_template
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/templating.py", line 152, in render_template
     return _render(app, template, context)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/templating.py", line 128, in _render
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/templating.py", line 129, in _render
     app.update_template_context(context)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 997, in update_template_context
-    context.update(func())
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask_recaptcha.py", line 59, in get_code
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 480, in update_template_context
+    context.update(self.ensure_sync(func)())
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask_recaptcha.py", line 59, in get_code
     return dict(recaptcha=Markup(self.get_code()))
 NameError: name 'Markup' is not defined
-2023-12-05 17:21:27,205 ERROR: Exception on /favicon.ico [GET] [in /home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py:1744]
+2023-12-05 17:34:51,500 ERROR: Exception on /favicon.ico [GET] [in /home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py:825]
 Traceback (most recent call last):
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1823, in full_dispatch_request
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 867, in full_dispatch_request
     rv = self.dispatch_request()
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1788, in dispatch_request
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 841, in dispatch_request
     self.raise_routing_exception(req)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1770, in raise_routing_exception
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 450, in raise_routing_exception
     raise request.routing_exception  # type: ignore
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/ctx.py", line 351, in match_request
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/ctx.py", line 353, in match_request
     result = self.url_adapter.match(return_rule=True)  # type: ignore
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/werkzeug/routing/map.py", line 624, in match
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/werkzeug/routing/map.py", line 624, in match
     raise NotFound() from None
 werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 2529, in wsgi_app
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 1455, in wsgi_app
     response = self.full_dispatch_request()
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1825, in full_dispatch_request
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 869, in full_dispatch_request
     rv = self.handle_user_exception(e)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1669, in handle_user_exception
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 752, in handle_user_exception
     return self.handle_http_exception(e)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1609, in handle_http_exception
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 727, in handle_http_exception
     return self.ensure_sync(handler)(e)
   File "/home/ramzidaher/Desktop/LoveJoy/main.py", line 509, in page_not_found
     return render_template('404.html'), 404
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/templating.py", line 147, in render_template
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/templating.py", line 152, in render_template
     return _render(app, template, context)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/templating.py", line 128, in _render
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/templating.py", line 129, in _render
     app.update_template_context(context)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 997, in update_template_context
-    context.update(func())
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask_recaptcha.py", line 59, in get_code
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 480, in update_template_context
+    context.update(self.ensure_sync(func)())
+  File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask_recaptcha.py", line 59, in get_code
     return dict(recaptcha=Markup(self.get_code()))
 NameError: name 'Markup' is not defined
-2023-12-05 17:21:43,176 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:104]
-2023-12-05 17:21:43,460 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:104]
-2023-12-05 17:32:33,398 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:104]
-2023-12-05 17:32:34,823 ERROR: Exception on / [GET] [in /home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py:825]
+2023-12-05 17:36:11,229 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:104]
+2023-12-05 17:36:12,412 ERROR: Exception on / [GET] [in /home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py:825]
 Traceback (most recent call last):
   File "/home/ramzidaher/Desktop/LoveJoy/venv/lib/python3.10/site-packages/flask/app.py", line 867, in full_dispatch_request
     rv = self.dispatch_request()

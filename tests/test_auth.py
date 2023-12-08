@@ -14,6 +14,7 @@ class AuthTestCase(unittest.TestCase):
             'contact': '1234567890'
         }
         response = requests.post(url, data=user_data)
+        
         self.assertEqual(response.status_code, 200)  # Adjust expected status code
         # Add more assertions as needed
 

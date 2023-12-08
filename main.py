@@ -21,12 +21,19 @@ import imghdr
 import pymemcache.client.hash
 import logging
 from logging.handlers import RotatingFileHandler
-from flask_recaptcha import ReCaptcha
-from markupsafe import Markup
 from cryptography.fernet import Fernet
 import random
 import datetime
+from markupsafe import Markup
+from PIL import Image, ImageDraw, ImageFont
+import random
+import base64
+import io
+from flask import jsonify
+import random
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
+# Initialize Flask
 
 
 # Initialize Flask App
@@ -49,8 +56,8 @@ app.config['MAIL_PASSWORD'] = 'vykn rhhe dpxw glsy'  # Set as environment variab
 app.config['MAIL_DEFAULT_SENDER'] = 'ramzi.daher@gmail.com'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB limit
 
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcGQScpAAAAAIA0NIiXNSn42ksvCgO460nzJH02'
-app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcGQScpAAAAANOHR6LLLuLzu1FEVYH_sjCBj0Yx'
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6Ld5_CcpAAAAAB0DbWhdFhhLb7JspoqtTaDUqM1F'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6Ld5_CcpAAAAAFM7XIZR7an2M5N4Eue9IJZMEFxi'
 
 
 
@@ -58,7 +65,7 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcGQScpAAAAANOHR6LLLuLzu1FEVYH_sjCBj0Yx'
 UPLOAD_FOLDER = 'static/uploads'  
 UPLOAD_FOLDER_PROFILE = 'static/uploads/profilepics'
 UPLOAD_FOLDER_EVALUATION = 'static/uploads/evaluation'
-
+MAX_FAILED_ATTEMPTS = 7
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
@@ -82,7 +89,8 @@ csrf = CSRFProtect(app)
 mail = Mail(app)
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
-
+# Initialize ReCaptcha
+# recaptcha = ReCaptcha(app=app)
 
 
 key = os.environ.get('FERNET_KEY')
@@ -123,6 +131,11 @@ class User(db.Model):
     security_answer3 = db.Column(db.String(300), nullable=True)
     two_factor_code = db.Column(db.String(6), nullable=True)
     two_factor_expires = db.Column(db.DateTime, nullable=True)
+    failed_login_attempts = db.Column(db.Integer, default=0)
+    lockout_timestamp = db.Column(db.DateTime, nullable=True)
+    verification_code = db.Column(db.String(100))  # Add this line
+    email_verified = db.Column(db.Boolean, default=False)  # To track if the email is verified
+
 
 
     def __repr__(self):
@@ -145,6 +158,7 @@ class Antique(db.Model):
 
     def __repr__(self):
         return f'<Antique {self.name}>'
+    
 
 #Main route page (landingpage)
 @app.route('/')
@@ -155,31 +169,39 @@ def home():
 
 
 
-def generate_reset_token(email):
+# Token generation
+def generate_verification_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-    return serializer.dumps(email, salt='password-reset-salt')
+    return serializer.dumps(email, salt='email-verification-salt')
 
-def confirm_reset_token(token, expiration=1800):
+# Token verification
+def confirm_reset_token(token, expiration=3600):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     try:
-        email = serializer.loads(token, salt='password-reset-salt', max_age=expiration)
+        email = serializer.loads(token, salt='email-verification-salt', max_age=expiration)
     except:
         return False
     return email
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         email = request.form['email'].strip()
-                # Validate email format
-                
+
+        # CAPTCHA validation
+        user_input_captcha = request.form['captcha']
+        if user_input_captcha != session.get('captcha_text', ''):
+            flash('CAPTCHA Incorrect! Please try again.', 'error')
+            return redirect(url_for('signup'))
+
         try:
             valid = validate_email(email)
             email = valid.email  # Update with the normalized form
         except EmailNotValidError:
             flash('Invalid email format', 'error')
             return redirect(url_for('signup'))
-        
+
         # Check if the email is already registered
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
@@ -206,8 +228,6 @@ def signup():
         else:
             profile_pic_url = None  # Or a default image path
 
-
-
         new_user = User(
             email=email,
             password=hashed_password,
@@ -224,8 +244,30 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect(url_for('login'))  
-    return render_template('register.html')
+        # Generate verification token
+        token = generate_verification_token(new_user.email)
+
+        # Create verification URL
+        verify_url = url_for('email_verification', token=token, _external=True)
+
+        # Send verification email
+        msg = Message("Email Verification", sender=app.config['MAIL_DEFAULT_SENDER'], recipients=[new_user.email])
+        msg.body = f"Please click the following link to verify your email: {verify_url}"
+        mail.send(msg)
+
+        flash('A verification email has been sent to your email address.', 'info')
+        return redirect(url_for('login'))
+    else:
+        # Generate a new CAPTCHA for each GET request
+        captcha_text = generate_captcha_text()
+        session['captcha_text'] = captcha_text
+        captcha_image = create_captcha_image(captcha_text)
+        data = io.BytesIO()
+        captcha_image.save(data, "PNG")
+        encoded_image_data = base64.b64encode(data.getvalue()).decode('utf-8')
+        return render_template('register.html', captcha_image_data=encoded_image_data)
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 @limiter.limit("5 per minute")  # Limit to 5 requests per minute
@@ -234,11 +276,18 @@ def login():
         
         username = request.form['username']
         password = request.form['password']
-        remember_me = request.form.get('remember_me')  
-        
+        remember_me = request.form.get('remember_me')
+
         user = User.query.filter_by(email=username).first()
         if user:
+            # Check if account is locked due to too many failed attempts
+            if user.failed_login_attempts >= MAX_FAILED_ATTEMPTS:
+                flash('Account locked due to too many failed login attempts. Please try again later.', 'error')
+                return render_template('login.html')
+
             if check_password_hash(user.password, password):
+                # Reset the failed login attempts after successful login
+                user.failed_login_attempts = 0
                 # Generate 2FA code
                 user.two_factor_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
                 user.two_factor_expires = datetime.datetime.now() + datetime.timedelta(minutes=10)
@@ -256,11 +305,17 @@ def login():
 
                 return redirect(url_for('two_factor_verify'))
             else:
+                # Increment the failed login attempts
+                user.failed_login_attempts += 1
+                if user.failed_login_attempts >= MAX_FAILED_ATTEMPTS:
+                    user.lockout_timestamp = datetime.utcnow()
+                db.session.commit()
                 flash('Invalid password. Please try again.', 'error')
         else:
             flash('Email not registered. Please check your email or register.', 'error')
 
     return render_template('login.html')
+
 
 
 #Logs out the userand ends session
@@ -631,6 +686,110 @@ def two_factor_verify():
             flash('Invalid or expired 2FA code', 'error')
 
     return render_template('verify_2fa.html')
+
+@app.route('/reset_lockout/<int:user_id>', methods=['GET'])
+def reset_lockout(user_id):
+    if 'user_id' not in session or not User.query.get(session['user_id']).is_admin:
+        flash("Unauthorized access.", "error")
+        return redirect(url_for('login'))
+
+    user = User.query.get(user_id)
+    if user:
+        user.failed_login_attempts = 0
+        user.lockout_timestamp = None
+        db.session.commit()
+        flash(f"Lockout reset for user {user.email}.", "success")
+    else:
+        flash("User not found.", "error")
+
+    return redirect(url_for('admin_dashboard'))
+
+
+@app.route('/verify_email/<verification_code>', methods=['GET'])
+def verify_email(verification_code):
+    # Find the user by verification code
+    user = User.query.filter_by(verification_code=verification_code).first()
+    
+    if user:
+        # Mark the user's email as verified
+        user.email_verified = True
+        user.verification_code = None  # Clear the verification code
+        db.session.commit()
+        
+        flash('Email verified successfully. You can now log in.', 'success')
+    else:
+        flash('Invalid verification code. Please try again.', 'error')
+
+    return redirect(url_for('login'))
+
+def generate_captcha_text():
+    return ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=6))
+
+
+
+
+
+def create_captcha_image(captcha_text):
+    # Create an image with white background
+    image = Image.new('RGB', (150, 60), color=(255, 255, 255))
+    draw = ImageDraw.Draw(image)
+
+    # Use a more consistent font size and increase contrast
+    font_size = 30
+    for i, char in enumerate(captcha_text):
+        x = 10 + i * 25  # Adjust x position for better spacing
+        y = random.randint(0, 15)  # Slight y position variation
+        font = ImageFont.truetype('/home/ramzidaher/Desktop/LoveJoy/static/arial.ttf', font_size)
+        color = (random.randint(50, 200), random.randint(50, 200), random.randint(50, 200))  # Higher contrast colors
+        draw.text((x, y), char, font=font, fill=color)
+
+    # Reduce noise and lines for better readability
+    width, height = image.size
+    for _ in range(random.randint(5, 10)):  # Fewer lines
+        x1 = random.randint(0, width)
+        y1 = random.randint(0, height)
+        x2 = random.randint(0, width)
+        y2 = random.randint(0, height)
+        draw.line(((x1, y1), (x2, y2)), fill='black', width=1)
+
+    for _ in range(random.randint(100, 200)):  # Fewer dots
+        x = random.randint(0, width)
+        y = random.randint(0, height)
+        draw.point((x, y), fill='black')
+
+    return image
+
+
+@app.route('/regenerate_captcha')
+def regenerate_captcha():
+    captcha_text = generate_captcha_text()
+    session['captcha_text'] = captcha_text
+    captcha_image = create_captcha_image(captcha_text)
+    data = io.BytesIO()
+    captcha_image.save(data, "PNG")
+    encoded_image_data = base64.b64encode(data.getvalue()).decode('utf-8')
+    return jsonify({'captcha_image_data': encoded_image_data})
+
+def generate_verification_token(email):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    return serializer.dumps(email, salt='email-verification-salt')
+
+
+
+
+@app.route('/verify_email/<token>', methods=['GET'])
+def email_verification(token):
+    try:
+        email = URLSafeTimedSerializer(app.config['SECRET_KEY']).loads(token, salt='email-verification-salt', max_age=3600)
+    except:
+        return 'The verification link is invalid or has expired', 400
+
+    user = User.query.filter_by(email=email).first_or_404()
+    user.email_verified = True
+    db.session.commit()
+    return 'Email verified successfully!'
+
+
 
 # Start the Flask application
 if __name__ == '__main__':
