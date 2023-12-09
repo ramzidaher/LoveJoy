@@ -174,6 +174,10 @@ def generate_verification_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt='email-verification-salt')
 
+# def generate_reset_token(email):
+#     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+#     return serializer.dumps(email, salt='password-reset-salt')
+
 # Token verification
 def confirm_reset_token(token, expiration=3600):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -241,11 +245,12 @@ def signup():
             security_question3=security_question3,
             security_answer3=security_answer3,
         )
+        token = generate_verification_token(new_user.email)
+        new_user.verification_code = token  # Store the token
         db.session.add(new_user)
         db.session.commit()
 
         # Generate verification token
-        token = generate_verification_token(new_user.email)
 
         # Create verification URL
         verify_url = url_for('email_verification', token=token, _external=True)
@@ -273,19 +278,21 @@ def signup():
 @limiter.limit("5 per minute")  # Limit to 5 requests per minute
 def login():
     if request.method == 'POST':
-        
         username = request.form['username']
         password = request.form['password']
         remember_me = request.form.get('remember_me')
 
         user = User.query.filter_by(email=username).first()
         if user:
-            # Check if account is locked due to too many failed attempts
             if user.failed_login_attempts >= MAX_FAILED_ATTEMPTS:
                 flash('Account locked due to too many failed login attempts. Please try again later.', 'error')
                 return render_template('login.html')
 
             if check_password_hash(user.password, password):
+                if not user.email_verified:  # Check if email is verified
+                    flash('Please verify your email before logging in.', 'error')
+                    return render_template('login.html')
+
                 # Reset the failed login attempts after successful login
                 user.failed_login_attempts = 0
                 # Generate 2FA code
@@ -305,7 +312,6 @@ def login():
 
                 return redirect(url_for('two_factor_verify'))
             else:
-                # Increment the failed login attempts
                 user.failed_login_attempts += 1
                 if user.failed_login_attempts >= MAX_FAILED_ATTEMPTS:
                     user.lockout_timestamp = datetime.utcnow()
@@ -318,6 +324,7 @@ def login():
 
 
 
+
 #Logs out the userand ends session
 @app.route('/logout')
 def logout():
@@ -327,8 +334,6 @@ def logout():
 @app.route('/evaluation', methods=['GET', 'POST'])
 def evaluateAntique():    
     image_url = None  # Initialize image_url to a default value
-
-
     if 'user_id' not in session:
         return render_template('login.html')
     
@@ -495,7 +500,7 @@ def reset_request():
         email = request.form['email']
         user = User.query.filter_by(email=email).first()
         if user:
-            token = generate_reset_token(user.email)
+            token = generate_verification_token(user.email)
             reset_url = url_for('reset_token', token=token, _external=True)
             msg = Message("Password Reset Request", 
             sender="your-email@example.com",
@@ -593,10 +598,10 @@ def internal_server_error(e):
 def ratelimit_handler(e):
     return "Rate limit exceeded", 429
 
-# @app.errorhandler(Exception)
-# def handle_exception(e):
-#     # pass the error to the template
-#     return render_template('error.html', error=e), 500
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # pass the error to the template
+    return render_template('error.html', error=e), 500
 
 @app.route('/admin/dashboard/update_status/<int:antique_id>', methods=['POST'])
 def update_status(antique_id):
