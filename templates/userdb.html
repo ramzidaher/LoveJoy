@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Access your personalized dashboard at LoveJoy's Antique to manage your antiques, upload evaluations, view your profile, and more." />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
-    <title>User Dashboard</title>
+    <title>User Dashboard - LoveJoy's Antique</title>
     <link rel="icon" type="image/x-icon" href="/static/images/Logo-removebg.png" />
+    <meta name="robots" content="noindex, nofollow">
 
     <style>
         body {
@@ -73,7 +75,6 @@
         @media (min-width: 600px) {
             .profile-pic {
                 margin: 40px auto 20px;
-                /* Adjust the margin for larger screens */
             }
         }
 
@@ -138,13 +139,11 @@
         h2 {
             font: var(--var-small-heading);
             color: var(--var-lightest);
-            /* padding on .coin-base */
         }
 
         h3 {
             font: var(--var-small-heading);
             color: var(--var-lightest);
-            /* padding on .coin-base */
         }
 
 
@@ -277,7 +276,6 @@
         }
 
         .user-card {
-            /* Flex container */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -285,16 +283,12 @@
         }
 
         .button-container {
-            /* Container for buttons */
             display: flex;
             justify-content: center;
-            /* Center buttons horizontally */
             gap: 10px;
-            /* Space between buttons */
         }
 
         .btn {
-            /* Button styling */
             background-color: #041E20;
             color: white;
             padding: 10px 20px;
@@ -302,7 +296,6 @@
             border-radius: 4px;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
-            /* Smooth transition for hover effect */
         }
 
         .btn:hover {
@@ -310,21 +303,17 @@
             transform: translateY(-5px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             background-color: #555;
-            /* Slightly darker background on hover */
             color: white;
-            /* Keep text color white on hover */
         }
 
         @media screen and (max-width: 600px) {
             .button-container {
                 flex-direction: column;
-                /* Stack buttons vertically on smaller screens */
                 width: 100%;
             }
 
             .btn {
                 width: 100%;
-                /* Full width for smaller screens */
             }
         }
 
@@ -340,7 +329,6 @@
         .menu-visible {
             opacity: 1;
             max-height: 200px;
-            /* Adjust as needed based on content */
             transition: opacity 0.5s, max-height 0.5s;
         }
 
@@ -348,16 +336,13 @@
         .menu-visible {
             margin: 20px auto;
             max-width: 600px;
-            /* Adjust as needed */
             background: #f0f0f0;
-            /* Same as user-card */
             border-radius: 8px;
             box-shadow: rgba(209, 201, 201, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
             padding: 20px;
             transition: opacity 0.5s, max-height 0.5s;
         }
 
-        /* Styles for hidden menu */
         .menu-hidden {
             opacity: 0;
             max-height: 0;
@@ -368,16 +353,13 @@
         .menu-visible {
             opacity: 1;
             max-height: 1000px;
-            /* Adjust as needed based on content */
             transition: opacity 0.5s, max-height 0.5s;
         }
 
-        /* Adjustments for form inputs */
         .form-control {
             border-radius: 4px;
         }
 
-        /* Button styling */
         .btn-primary {
             background-color: #666;
             border-color: #666;
@@ -407,18 +389,15 @@
 
         .status-badge-pending {
             background-color: #FFA500;
-            /* Orange color for pending */
         }
 
         .status-badge-done {
             background-color: #28a745;
-            /* Green color for done */
         }
 
         .card-container {
             position: relative;
-            /* To position the status badge absolutely within the card */
-            /* ... other styles ... */
+
         }
 
         .contact-method {
@@ -431,7 +410,6 @@
             margin-left: 10px;
             font-size: 0.8em;
             color: var(--var-soft-blue);
-            /* Or choose a color that fits your design */
         }
 
         .antique-age {
@@ -449,7 +427,6 @@
 
         .age-value {
             color: var(--var-soft-blue);
-            /* Or choose a color that fits your design */
             font-size: 0.9em;
         }
 
@@ -458,16 +435,12 @@
             top: 30px;
             left: 30px;
             z-index: 1000;
-            /* Ensures the button stays on top of other elements */
         }
 
         .btn-home {
             background-color: white;
-            /* White background */
             color: black;
-            /* Black text */
             border: 1px solid #555;
-            /* Optional: adds a subtle border for better visibility */
         }
     </style>
 </head>

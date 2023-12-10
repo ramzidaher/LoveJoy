@@ -15,8 +15,7 @@ class AuthTestCase(unittest.TestCase):
         }
         response = requests.post(url, data=user_data)
         
-        self.assertEqual(response.status_code, 200)  # Adjust expected status code
-        # Add more assertions as needed
+        self.assertEqual(response.status_code, 200)  
 
 if __name__ == '__main__':
     unittest.main()

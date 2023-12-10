@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
-<link rel="icon" type="image/x-icon" href="/static/images/Logo-removebg.png" />
 
 <head>
-  <title>Login Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+  <link rel="icon" type="image/x-icon" href="/static/images/Logo-removebg.png" />
+  <meta name="description"
+    content="Login to access your personal dashboard and explore exclusive antique collections at LoveJoy's Antique." />
+  <meta name="robots" content="noindex, nofollow">
+  <title>Login - LoveJoy's Antique</title>
   <style>
     .login {
       min-height: 100vh;
@@ -45,13 +48,14 @@
   </style>
   <script>
     document.getElementById('togglePassword').addEventListener('click', function (e) {
-        const password = document.getElementById('password');
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        this.classList.toggle('fa-eye-slash');
+      const password = document.getElementById('password');
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      this.classList.toggle('fa-eye-slash');
     });
-</script>
+  </script>
 </head>
+
 <body>
   <div class="container-fluid ps-md-0">
     <div class="row g-0">
@@ -68,13 +72,13 @@
                 </div>
                 <div class="col-12">
                   {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                      <div class="alert alert-warning" role="alert">
-                        {% for message in messages %}
-                          {{ message }}
-                        {% endfor %}
-                      </div>
-                    {% endif %}
+                  {% if messages %}
+                  <div class="alert alert-warning" role="alert">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                  </div>
+                  {% endif %}
                   {% endwith %}
                 </div>
                 <!-- Sign In Form -->
@@ -88,22 +92,24 @@
                   <div class="form-floating mb-3 position-relative">
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                     <label for="password">Password</label>
-                    <i class="fa fa-eye position-absolute top-50 end-0 translate-middle-y me-3" id="togglePassword" style="cursor: pointer;"></i>
-                </div>
-                
+                    <i class="fa fa-eye position-absolute top-50 end-0 translate-middle-y me-3" id="togglePassword"
+                      style="cursor: pointer;"></i>
+                  </div>
+
 
                   <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" name="remember_me" id="rememberPasswordCheck">
                     <label class="form-check-label" for="rememberPasswordCheck">
-                        Remember Me
-                    </label>                    
+                      Remember Me
+                    </label>
                   </div>
 
                   <div class="d-grid">
                     <button class="btn btn-lg btn-login text-uppercase fw-bold mb-2" type="submit"
                       id="customButton">Sign in</button>
                     <div class="text-center">
-                      <a class="small" href="/reset">Forgot password?</a> | <a class="small" href="/register">No account? Register</a>
+                      <a class="small" href="/reset">Forgot password?</a> | <a class="small" href="/register">No
+                        account? Register</a>
 
                     </div>
                   </div>
@@ -119,12 +125,12 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.getElementById('togglePassword').addEventListener('click', function (e) {
-        const password = document.getElementById('password');
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        this.classList.toggle('fa-eye-slash');
+      const password = document.getElementById('password');
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      this.classList.toggle('fa-eye-slash');
     });
-</script>
+  </script>
 </body>
 
 </html>

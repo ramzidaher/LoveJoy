@@ -33,14 +33,16 @@ from flask import jsonify
 import random
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-# Initialize Flask
+
+
+
 
 
 # Initialize Flask App
 app = Flask(__name__)
 
 
-# Database Configuration
+# Database Configuration #
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/ramzidaher/Desktop/LoveJoy/instance/users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = '2e2ccdcef15c5a71fd7ba1ffa6f3a3d0'
@@ -48,16 +50,11 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-# app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_USERNAME')  # Set as environment variable
-# app.config['MAIL_PASSWORD'] = os.environ.get('GMAIL_PASSWORD')  # Set as environment variable
-# app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_USERNAME'] = 'ramzi.daher@gmail.com'  # Set as environment variable
-app.config['MAIL_PASSWORD'] = 'vykn rhhe dpxw glsy'  # Set as environment variable
-app.config['MAIL_DEFAULT_SENDER'] = 'ramzi.daher@gmail.com'
+app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_USERNAME')  
+app.config['MAIL_PASSWORD'] = os.environ.get('GMAIL_PASSWORD')  
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB limit
 
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6Ld5_CcpAAAAAB0DbWhdFhhLb7JspoqtTaDUqM1F'
-app.config['RECAPTCHA_PRIVATE_KEY'] = '6Ld5_CcpAAAAAFM7XIZR7an2M5N4Eue9IJZMEFxi'
 
 
 
@@ -76,21 +73,24 @@ MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB
 
 ALLOWED_MIME_TYPES = {'image/png', 'image/jpeg', 'image/gif'}
 
-# INITIALIZATION #
+
+"""INITIALIZATION """
 # Initialize limiter
 limiter = Limiter(
-    key_func=get_remote_address,  # Use the remote address of the client as the rate limit key
+    key_func=get_remote_address, 
     app=app,
     default_limits=["200 per day", "50 per hour"]  # Default limits
 )
+
 # Initialize CSRF protection
 csrf = CSRFProtect(app)
+
 # Mail Initialize 
 mail = Mail(app)
+
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
-# Initialize ReCaptcha
-# recaptcha = ReCaptcha(app=app)
+
 
 
 key = os.environ.get('FERNET_KEY')
@@ -133,11 +133,8 @@ class User(db.Model):
     two_factor_expires = db.Column(db.DateTime, nullable=True)
     failed_login_attempts = db.Column(db.Integer, default=0)
     lockout_timestamp = db.Column(db.DateTime, nullable=True)
-    verification_code = db.Column(db.String(100))  # Add this line
-    email_verified = db.Column(db.Boolean, default=False)  # To track if the email is verified
-
-
-
+    verification_code = db.Column(db.String(100))  
+    email_verified = db.Column(db.Boolean, default=False)  
     def __repr__(self):
         return f'<User {self.name}>'
 
@@ -174,9 +171,6 @@ def generate_verification_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt='email-verification-salt')
 
-# def generate_reset_token(email):
-#     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-#     return serializer.dumps(email, salt='password-reset-salt')
 
 # Token verification
 def confirm_reset_token(token, expiration=3600):
@@ -201,7 +195,7 @@ def signup():
 
         try:
             valid = validate_email(email)
-            email = valid.email  # Update with the normalized form
+            email = valid.email  
         except EmailNotValidError:
             flash('Invalid email format', 'error')
             return redirect(url_for('signup'))
@@ -325,7 +319,7 @@ def login():
 
 
 
-#Logs out the userand ends session
+#Logs out the user and ends session
 @app.route('/logout')
 def logout():
     session.clear()
@@ -355,7 +349,7 @@ def evaluateAntique():
             flash('No selected file', 'error')
             return redirect(request.url)
     
-        if not allowed_file(antique_image):  # This is the correct check
+        if not allowed_file(antique_image):  
             flash('Invalid file type or size', 'error')
             return redirect(request.url)
     
@@ -452,7 +446,6 @@ def homepage():
 
 
 
-from flask import render_template
 
 @app.route('/admin/')
 def admin():
@@ -586,6 +579,7 @@ def allowed_file(file_storage):
     return is_allowed_extension and is_allowed_size and is_allowed_content_type
 
 
+# ERROR PAGES #
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -600,8 +594,9 @@ def ratelimit_handler(e):
 
 @app.errorhandler(Exception)
 def handle_exception(e):
-    # pass the error to the template
     return render_template('error.html', error=e), 500
+
+
 
 @app.route('/admin/dashboard/update_status/<int:antique_id>', methods=['POST'])
 def update_status(antique_id):
@@ -638,7 +633,6 @@ def edit_antique(antique_id):
         antique.name = request.form['name']
         antique.description = request.form['description']
         antique.age = request.form['age']
-        # ... include other fields as necessary ...
 
         db.session.commit()
         flash('Antique updated successfully.', 'success')
@@ -656,6 +650,7 @@ def delete_antique(antique_id):
     
     return redirect(url_for('manage_antiques'))
 
+# Data Encryption #
 def encrypt_data(data):
     return cipher_suite.encrypt(data.encode()).decode()
 
@@ -732,32 +727,28 @@ def generate_captcha_text():
 
 
 
-
-
 def create_captcha_image(captcha_text):
     # Create an image with white background
     image = Image.new('RGB', (150, 60), color=(255, 255, 255))
     draw = ImageDraw.Draw(image)
 
-    # Use a more consistent font size and increase contrast
     font_size = 30
     for i, char in enumerate(captcha_text):
-        x = 10 + i * 25  # Adjust x position for better spacing
-        y = random.randint(0, 15)  # Slight y position variation
+        x = 10 + i * 25  
+        y = random.randint(0, 15)  
         font = ImageFont.truetype('/home/ramzidaher/Desktop/LoveJoy/static/arial.ttf', font_size)
-        color = (random.randint(50, 200), random.randint(50, 200), random.randint(50, 200))  # Higher contrast colors
+        color = (random.randint(50, 200), random.randint(50, 200), random.randint(50, 200)) 
         draw.text((x, y), char, font=font, fill=color)
 
-    # Reduce noise and lines for better readability
     width, height = image.size
-    for _ in range(random.randint(5, 10)):  # Fewer lines
+    for _ in range(random.randint(5, 10)):  
         x1 = random.randint(0, width)
         y1 = random.randint(0, height)
         x2 = random.randint(0, width)
         y2 = random.randint(0, height)
         draw.line(((x1, y1), (x2, y2)), fill='black', width=1)
 
-    for _ in range(random.randint(100, 200)):  # Fewer dots
+    for _ in range(random.randint(100, 200)):  
         x = random.randint(0, width)
         y = random.randint(0, height)
         draw.point((x, y), fill='black')
@@ -794,10 +785,16 @@ def email_verification(token):
     db.session.commit()
     return 'Email verified successfully!'
 
+# Initializ DataBase #
+@app.cli.command("init-db")
+@with_appcontext
+def init_db_command():
+    """Clear existing data and create new tables."""
+    db.create_all()
+    click.echo("Initialized the database.")
+
 
 
 # Start the Flask application
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()  # Create database tables for our data models
-    app.run(debug=True)
+    app.run(debug=False)
