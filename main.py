@@ -8,7 +8,7 @@ from flask import (
 )
 from flask.cli import with_appcontext
 from flask_mail import Mail, Message
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemyc
 from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy import create_engine, MetaData, Table
 from werkzeug.security import check_password_hash, generate_password_hash
