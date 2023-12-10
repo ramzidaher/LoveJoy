@@ -38,6 +38,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 
 
+
+
 # Initialize Flask App
 app = Flask(__name__)
 
@@ -54,6 +56,7 @@ app.config['MAIL_USERNAME'] = os.environ.get('GMAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get('GMAIL_PASSWORD')  
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB limit
+
 
 
 
