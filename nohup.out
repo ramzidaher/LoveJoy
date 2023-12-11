@@ -1,0 +1,146 @@
+[2023-12-11 09:56:15 +0000] [24339] [INFO] Starting gunicorn 21.2.0
+[2023-12-11 09:56:15 +0000] [24339] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2023-12-11 09:56:15 +0000] [24339] [ERROR] Retrying in 1 second.
+[2023-12-11 09:56:16 +0000] [24339] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2023-12-11 09:56:16 +0000] [24339] [ERROR] Retrying in 1 second.
+[2023-12-11 09:56:17 +0000] [24339] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2023-12-11 09:56:17 +0000] [24339] [ERROR] Retrying in 1 second.
+[2023-12-11 09:56:18 +0000] [24339] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2023-12-11 09:56:18 +0000] [24339] [ERROR] Retrying in 1 second.
+[2023-12-11 09:56:19 +0000] [24339] [ERROR] Connection in use: ('0.0.0.0', 5000)
+[2023-12-11 09:56:19 +0000] [24339] [ERROR] Retrying in 1 second.
+[2023-12-11 09:56:20 +0000] [24339] [ERROR] Can't connect to ('0.0.0.0', 5000)
+[2023-12-11 10:00:14 +0000] [24350] [INFO] Starting gunicorn 21.2.0
+[2023-12-11 10:00:14 +0000] [24350] [INFO] Listening at: http://0.0.0.0:5000 (24350)
+[2023-12-11 10:00:14 +0000] [24350] [INFO] Using worker: sync
+[2023-12-11 10:00:14 +0000] [24351] [INFO] Booting worker with pid: 24351
+[2023-12-11 10:00:14 +0000] [24352] [INFO] Booting worker with pid: 24352
+[2023-12-11 10:00:14 +0000] [24353] [INFO] Booting worker with pid: 24353
+[2023-12-11 10:00:14 +0000] [24354] [INFO] Booting worker with pid: 24354
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:00:15,858] INFO in main: Flask application startup
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:00:16,051] INFO in main: Flask application startup
+[2023-12-11 10:00:16,139] INFO in main: Flask application startup
+[2023-12-11 10:00:16,141] INFO in main: Flask application startup
+[2023-12-11 10:01:13 +0000] [24350] [ERROR] Worker (pid:24351) was sent SIGHUP!
+[2023-12-11 10:01:13 +0000] [24350] [ERROR] Worker (pid:24352) was sent SIGHUP!
+[2023-12-11 10:01:13 +0000] [24350] [ERROR] Worker (pid:24353) was sent SIGHUP!
+[2023-12-11 10:01:13 +0000] [24350] [ERROR] Worker (pid:24354) was sent SIGHUP!
+[2023-12-11 10:01:13 +0000] [24364] [INFO] Booting worker with pid: 24364
+[2023-12-11 10:01:13 +0000] [24365] [INFO] Booting worker with pid: 24365
+[2023-12-11 10:01:13 +0000] [24366] [INFO] Booting worker with pid: 24366
+[2023-12-11 10:01:13 +0000] [24367] [INFO] Booting worker with pid: 24367
+[2023-12-11 10:01:13 +0000] [24350] [INFO] Handling signal: hup
+[2023-12-11 10:01:13 +0000] [24350] [INFO] Hang up: Master
+[2023-12-11 10:01:13 +0000] [24368] [INFO] Booting worker with pid: 24368
+[2023-12-11 10:01:13 +0000] [24369] [INFO] Booting worker with pid: 24369
+[2023-12-11 10:01:13 +0000] [24370] [INFO] Booting worker with pid: 24370
+[2023-12-11 10:01:13 +0000] [24371] [INFO] Booting worker with pid: 24371
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:01:16,827] INFO in main: Flask application startup
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:01:16 +0000] [24364] [INFO] Worker exiting (pid: 24364)
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:01:17,386] INFO in main: Flask application startup
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:01:17 +0000] [24365] [INFO] Worker exiting (pid: 24365)
+[2023-12-11 10:01:17,642] INFO in main: Flask application startup
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:01:17 +0000] [24366] [INFO] Worker exiting (pid: 24366)
+[2023-12-11 10:01:17 +0000] [24350] [ERROR] Worker (pid:24366) was sent SIGTERM!
+[2023-12-11 10:01:17 +0000] [24350] [ERROR] Worker (pid:24364) was sent SIGTERM!
+[2023-12-11 10:01:17 +0000] [24350] [ERROR] Worker (pid:24365) was sent SIGTERM!
+[2023-12-11 10:01:17,889] INFO in main: Flask application startup
+[2023-12-11 10:01:17 +0000] [24367] [INFO] Worker exiting (pid: 24367)
+[2023-12-11 10:01:17,991] INFO in main: Flask application startup
+[2023-12-11 10:01:17,994] INFO in main: Flask application startup
+[2023-12-11 10:01:17,998] INFO in main: Flask application startup
+[2023-12-11 10:01:18,001] INFO in main: Flask application startup
+[2023-12-11 10:02:00 +0000] [24350] [INFO] Handling signal: term
+[2023-12-11 10:02:00 +0000] [24368] [INFO] Worker exiting (pid: 24368)
+[2023-12-11 10:02:00 +0000] [24369] [INFO] Worker exiting (pid: 24369)
+The list is empty.
+[2023-12-11 10:02:00 +0000] [24370] [INFO] Worker exiting (pid: 24370)
+[2023-12-11 10:02:00 +0000] [24371] [INFO] Worker exiting (pid: 24371)
+[2023-12-11 10:02:00 +0000] [24350] [ERROR] Worker (pid:24371) was sent SIGTERM!
+[2023-12-11 10:02:00 +0000] [24350] [ERROR] Worker (pid:24369) was sent SIGTERM!
+[2023-12-11 10:02:00 +0000] [24350] [ERROR] Worker (pid:24368) was sent SIGTERM!
+[2023-12-11 10:02:00 +0000] [24350] [ERROR] Worker (pid:24370) was sent SIGTERM!
+[2023-12-11 10:02:00 +0000] [24350] [INFO] Shutting down: Master
+[2023-12-11 10:02:21 +0000] [24795] [INFO] Starting gunicorn 21.2.0
+[2023-12-11 10:02:21 +0000] [24795] [INFO] Listening at: http://0.0.0.0:5000 (24795)
+[2023-12-11 10:02:21 +0000] [24795] [INFO] Using worker: sync
+[2023-12-11 10:02:21 +0000] [24796] [INFO] Booting worker with pid: 24796
+[2023-12-11 10:02:22 +0000] [24797] [INFO] Booting worker with pid: 24797
+[2023-12-11 10:02:22 +0000] [24798] [INFO] Booting worker with pid: 24798
+[2023-12-11 10:02:22 +0000] [24799] [INFO] Booting worker with pid: 24799
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:02:23,945] INFO in main: Flask application startup
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:02:24,099] INFO in main: Flask application startup
+[2023-12-11 10:02:24,102] INFO in main: Flask application startup
+[2023-12-11 10:02:24,116] INFO in main: Flask application startup
+[2023-12-11 10:04:33 +0000] [24795] [ERROR] Worker (pid:24796) was sent SIGHUP!
+[2023-12-11 10:04:33 +0000] [24795] [ERROR] Worker (pid:24797) was sent SIGHUP!
+[2023-12-11 10:04:33 +0000] [24795] [ERROR] Worker (pid:24799) was sent SIGHUP!
+[2023-12-11 10:04:33 +0000] [24795] [ERROR] Worker (pid:24798) was sent SIGHUP!
+[2023-12-11 10:04:33 +0000] [24815] [INFO] Booting worker with pid: 24815
+[2023-12-11 10:04:33 +0000] [24816] [INFO] Booting worker with pid: 24816
+[2023-12-11 10:04:33 +0000] [24795] [INFO] Handling signal: hup
+[2023-12-11 10:04:33 +0000] [24795] [INFO] Hang up: Master
+[2023-12-11 10:04:33 +0000] [24817] [INFO] Booting worker with pid: 24817
+[2023-12-11 10:04:33 +0000] [24818] [INFO] Booting worker with pid: 24818
+[2023-12-11 10:04:33 +0000] [24819] [INFO] Booting worker with pid: 24819
+[2023-12-11 10:04:33 +0000] [24820] [INFO] Booting worker with pid: 24820
+[2023-12-11 10:04:33 +0000] [24821] [INFO] Booting worker with pid: 24821
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:04:37,010] INFO in main: Flask application startup
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+/home/ubuntu/.local/lib/python3.10/site-packages/flask_limiter/extension.py:336: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2023-12-11 10:04:37,135] INFO in main: Flask application startup
+[2023-12-11 10:04:37 +0000] [24815] [INFO] Worker exiting (pid: 24815)
+[2023-12-11 10:04:37 +0000] [24816] [INFO] Worker exiting (pid: 24816)
+[2023-12-11 10:04:37,389] INFO in main: Flask application startup
+[2023-12-11 10:04:37,397] INFO in main: Flask application startup
+[2023-12-11 10:04:37,401] INFO in main: Flask application startup
+[2023-12-11 10:04:37,405] INFO in main: Flask application startup
+[2023-12-11 10:04:37,408] INFO in main: Flask application startup
+[2023-12-11 10:04:37 +0000] [24817] [INFO] Worker exiting (pid: 24817)
+[2023-12-11 10:04:37 +0000] [24795] [ERROR] Worker (pid:24817) was sent SIGTERM!
+[2023-12-11 10:04:37 +0000] [24795] [ERROR] Worker (pid:24816) was sent SIGTERM!
+[2023-12-11 10:04:37 +0000] [24795] [ERROR] Worker (pid:24815) was sent SIGTERM!

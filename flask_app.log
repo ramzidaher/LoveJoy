@@ -1,59 +1,103 @@
-2023-12-09 13:11:53,728 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-09 13:13:30,704 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-09 13:13:31,035 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-09 13:15:20,848 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-09 13:15:21,175 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-09 13:15:35,248 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 09:42:48,154 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:111]
-2023-12-10 09:43:49,747 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:111]
-2023-12-10 09:43:50,074 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:111]
-2023-12-10 09:45:21,499 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:111]
-2023-12-10 10:11:20,198 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:111]
-2023-12-10 10:11:25,075 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:111]
-2023-12-10 10:14:36,161 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:15:35,014 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:15:52,104 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:16:49,154 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:17:35,601 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:18:20,623 ERROR: Exception on /register [POST] [in /home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py:825]
+2023-12-10 21:31:40,005 ERROR: Exception on /register [POST] [in /home/ubuntu/.local/lib/python3.10/site-packages/flask/app.py:825]
 Traceback (most recent call last):
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 1455, in wsgi_app
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/flask/app.py", line 1455, in wsgi_app
     response = self.full_dispatch_request()
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 869, in full_dispatch_request
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/flask/app.py", line 869, in full_dispatch_request
     rv = self.handle_user_exception(e)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 867, in full_dispatch_request
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/flask/app.py", line 867, in full_dispatch_request
     rv = self.dispatch_request()
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask/app.py", line 852, in dispatch_request
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/flask/app.py", line 852, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-  File "/home/ramzidaher/Desktop/LoveJoy/main.py", line 255, in signup
-    mail.send(msg)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask_mail.py", line 492, in send
-    message.send(connection)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask_mail.py", line 427, in send
-    connection.send(self)
-  File "/home/ramzidaher/.local/lib/python3.10/site-packages/flask_mail.py", line 177, in send
-    assert message.sender, (
-AssertionError: The message does not specify a sender and a default sender has not been configured
-2023-12-10 10:19:09,785 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:21:37,872 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:21:47,261 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:22:43,430 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:35:48,488 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:38:38,433 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:39:32,495 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:40:17,828 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:41:07,979 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:41:10,869 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:44:58,809 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:45:03,406 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:46:35,335 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:47:24,087 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:47:26,130 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 10:50:36,133 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:109]
-2023-12-10 11:17:30,722 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:121]
-2023-12-10 11:18:29,468 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:121]
-2023-12-10 11:19:59,993 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:121]
-2023-12-10 11:20:03,090 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:121]
-2023-12-10 11:20:08,787 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:120]
-2023-12-10 11:20:14,029 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:120]
-2023-12-10 11:20:20,087 INFO: Flask application startup [in /home/ramzidaher/Desktop/LoveJoy/main.py:120]
+  File "/home/ubuntu/LoveJoy/main.py", line 210, in signup
+    existing_user = User.query.filter_by(email=email).first()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 2748, in first
+    return self.limit(1)._iter().first()  # type: ignore
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 2847, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/orm/session.py", line 2308, in execute
+    return self._execute_internal(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/orm/session.py", line 2190, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/orm/context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 2343, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.password AS user_password, user.name AS user_name, user.contact AS user_contact, user.image_url AS user_image_url, user.image_data AS user_image_data, user.is_admin AS user_is_admin, user.security_question1 AS user_security_question1, user.security_answer1 AS user_security_answer1, user.security_question2 AS user_security_question2, user.security_answer2 AS user_security_answer2, user.security_question3 AS user_security_question3, user.security_answer3 AS user_security_answer3, user.two_factor_code AS user_two_factor_code, user.two_factor_expires AS user_two_factor_expires, user.failed_login_attempts AS user_failed_login_attempts, user.lockout_timestamp AS user_lockout_timestamp, user.verification_code AS user_verification_code, user.email_verified AS user_email_verified 
+FROM user 
+WHERE user.email = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('ramzi.daher@gmail.com', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2023-12-10 21:33:06,005 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:36:09,121 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:36:25,241 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:38:28,321 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:38:38,543 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:39:18,350 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:44:32,999 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:44:33,062 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:44:33,144 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 21:44:33,185 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 22:21:45,143 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 22:21:45,392 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 22:21:45,711 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 22:21:45,755 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 22:21:45,758 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 22:21:45,767 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-10 22:21:45,772 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:36,017 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:36,166 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:36,204 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:36,248 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:57,273 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:57,435 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:57,439 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:57,445 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 09:54:57,456 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:00:15,858 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:00:16,051 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:00:16,139 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:00:16,141 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:01:16,827 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:01:17,386 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:01:17,642 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:01:17,889 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:01:17,994 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:01:17,998 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:01:18,001 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:01:17,991 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:02:23,945 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:02:24,099 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:02:24,102 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:02:24,116 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:04:37,010 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:04:37,135 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:04:37,389 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:04:37,397 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:04:37,401 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:04:37,405 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]
+2023-12-11 10:04:37,408 INFO: Flask application startup [in /home/ubuntu/LoveJoy/main.py:115]

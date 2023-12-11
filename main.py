@@ -45,7 +45,7 @@ app = Flask(__name__)
 
 
 # Database Configuration #
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/ramzidaher/Desktop/LoveJoy/instance/users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/ubuntu/LoveJoy/instance/users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = '2e2ccdcef15c5a71fd7ba1ffa6f3a3d0'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -67,9 +67,12 @@ UPLOAD_FOLDER_PROFILE = 'static/uploads/profilepics'
 UPLOAD_FOLDER_EVALUATION = 'static/uploads/evaluation'
 MAX_FAILED_ATTEMPTS = 7
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+BASE_URL = "https://lovejoyantique.co"
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
 app.config['UPLOAD_FOLDER_EVALUATION'] = UPLOAD_FOLDER_EVALUATION
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 
 MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB
@@ -250,7 +253,7 @@ def signup():
         # Generate verification token
 
         # Create verification URL
-        verify_url = url_for('email_verification', token=token, _external=True)
+        verify_url = f"{BASE_URL}/verify_email/{token}"
 
         # Send verification email
         msg = Message("Email Verification", sender=app.config['MAIL_DEFAULT_SENDER'], recipients=[new_user.email])
@@ -496,11 +499,11 @@ def reset_request():
         email = request.form['email']
         user = User.query.filter_by(email=email).first()
         if user:
-            token = generate_verification_token(user.email)
-            reset_url = url_for('reset_token', token=token, _external=True)
-            msg = Message("Password Reset Request", 
-            sender="your-email@example.com",
-            recipients=[user.email])
+            with app.app_context():
+                token = generate_verification_token(user.email)
+                reset_url = f"{BASE_URL}/reset/{token}"
+
+            msg = Message("Password Reset Request", sender="your-email@example.com", recipients=[user.email])
             msg.body = f"To reset your password, visit the following link: {reset_url}"
             mail.send(msg)
 
@@ -583,6 +586,7 @@ def allowed_file(file_storage):
 
 
 # ERROR PAGES #
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -598,7 +602,6 @@ def ratelimit_handler(e):
 @app.errorhandler(Exception)
 def handle_exception(e):
     return render_template('error.html', error=e), 500
-
 
 
 @app.route('/admin/dashboard/update_status/<int:antique_id>', methods=['POST'])
@@ -739,7 +742,7 @@ def create_captcha_image(captcha_text):
     for i, char in enumerate(captcha_text):
         x = 10 + i * 25  
         y = random.randint(0, 15)  
-        font = ImageFont.truetype('/home/ramzidaher/Desktop/LoveJoy/static/arial.ttf', font_size)
+        font = ImageFont.truetype('/home/ubuntu/LoveJoy/static/arial.ttf', font_size)
         color = (random.randint(50, 200), random.randint(50, 200), random.randint(50, 200)) 
         draw.text((x, y), char, font=font, fill=color)
 
