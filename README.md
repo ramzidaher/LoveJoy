@@ -84,8 +84,7 @@ Contributions to LoveJoy are welcome! Please follow these steps:
 Include details about the project's license here.
 
 ## Contact
-For support or queries, contact [Your Contact Information].
+For support or queries, contact ramzi.daher@gmail.com.
 
 ---
 
-This README provides a basic guide to get started with the LoveJoy application. You can customize it further based on your project's specific requirements and additional details you wish to include.
